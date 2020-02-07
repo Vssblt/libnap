@@ -24,3 +24,4 @@ targetver.h
 StdAfx.h
 StdAfx.cpp
 .temp/
+install/

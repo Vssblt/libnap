@@ -1,4 +1,4 @@
-#include "ent_common.h"
+#include "nap_common.h"
 
 _NAP_BEGIN
 

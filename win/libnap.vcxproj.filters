@@ -6,16 +6,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\ent_common.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\src\ent_common.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\libnap.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\nap_common.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\nap_common.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

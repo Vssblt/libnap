@@ -23,8 +23,19 @@ using namespace std;
 //#endif
 
 
-#define PORT 12968
+/*
 
+
+跨平台模块的实现依赖 nap_common.h
+网络
+内存池(gc)
+线程池
+反射
+日志
+反射
+Mysql API
+OpenSSL
+*/
 
 
 int main() {

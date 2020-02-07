@@ -21,6 +21,9 @@
   <ItemGroup>
     <ClCompile Include="..\test\test.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{5F507C93-170B-4B41-B5C1-9DC7AE0AF139}</ProjectGuid>
@@ -75,18 +78,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>../src;E:\MyProgram\cryptopp-CRYPTOPP_6_1_0;$(IncludePath)</IncludePath>
     <LibraryPath>../output/x86/Debug/;$(LibraryPath);E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\output</LibraryPath>
+    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>../src;E:\MyProgram\cryptopp-CRYPTOPP_6_1_0;$(IncludePath)</IncludePath>
     <LibraryPath>../output/x86/Release/;$(LibraryPath);E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\output</LibraryPath>
+    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>../src;E:\MyProgram\cryptopp-CRYPTOPP_6_1_0;$(IncludePath)</IncludePath>
     <LibraryPath>../output/x64/Debug/;$(LibraryPath);E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\output</LibraryPath>
+    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>../src;E:\MyProgram\cryptopp-CRYPTOPP_6_1_0;$(IncludePath)</IncludePath>
     <LibraryPath>../output/x64/Release/;$(LibraryPath);E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\output</LibraryPath>
+    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
