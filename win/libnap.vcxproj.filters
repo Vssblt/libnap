@@ -12,9 +12,21 @@
     <ClInclude Include="..\src\nap_common.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\aes.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\binstream.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\nap_common.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\aes.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\binstream.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

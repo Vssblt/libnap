@@ -5,13 +5,18 @@
 #include <assert.h>
 #include <stdio.h>
 #include <vector>
+#include <queue>
 #include <map>
 #include <array>
 #include <limits.h>
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <mutex>
 #include <algorithm>
+#include <functional>
+#include <future>
+#include <stdexcept>
 
 
 typedef unsigned char byte;
@@ -77,4 +82,22 @@ uint32_t mhash(const char* str, uint32_t len);
 //Get the current timestamp
 uint32_t timestamp();
 
+//Random
+template<class T = int>
+T random(T min, T max);
+
+
+
+template<class T>
+inline T random(T min, T max){
+	std::random_device rd;
+	std::default_random_engine engine(rd());
+	std::uniform_int_distribution<T> dis(min, max);
+	auto dice = std::bind(dis, engine);
+	return dice();
+}
+
+
 _NAP_END
+
+
