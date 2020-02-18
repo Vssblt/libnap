@@ -1,3 +1,5 @@
+COMMON +=  -I../src/ 
+LINKLIB += -L../output/ -lnap
 DEPS = $(shell find ./ -name "*.h")
 SRC = $(shell find ./ -name "*.cpp")
 OBJ = $(SRC:%.cpp=%.o) 
@@ -8,7 +10,7 @@ build: test
 
 test: test.cpp
 	g++ -o $(OUTF)/test $(COMMON) $< $(LINKLIB) -g
-	mv ./*.o $(OUTF)/
+	-mv ./*.o $(OUTF)/
 
 %.o: %.cpp $(DEPS)
 	$(CXX) -c $<  -o $@ $(COMMON)

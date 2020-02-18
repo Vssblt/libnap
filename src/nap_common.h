@@ -17,6 +17,7 @@
 #include <functional>
 #include <future>
 #include <stdexcept>
+#include <stdint.h>
 
 
 typedef unsigned char byte;
@@ -31,6 +32,7 @@ typedef unsigned char byte;
 	#define LINUX
 	#define SOCKET int
 	#define SOCKET_ERROR (-1)  
+	#include <endian.h>
 	#include <sys/types.h>
 	#include <sys/socket.h>
 	#include <sys/ioctl.h>

@@ -167,8 +167,8 @@ binstream& binstream::operator<<(const std::string& b) {
 }
 
 binstream binstream::substr(int pos, int len){
-	if (pos > this->length) return binstream();
-	if (pos + len > this->length) len = this->length - pos;
+	if ((uint32_t)pos > this->length) return binstream();
+	if ((uint32_t)pos + len > this->length) len = this->length - pos;
 	return binstream(content + pos, len);
 }
 

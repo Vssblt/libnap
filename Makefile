@@ -1,10 +1,10 @@
-COMMON = -std=c++11 -W -Wall -O0 $(Mco) -I/usr/local/include/cryptopp
+COMMON = -std=c++11 -W -Wall -O0 $(Mco) 
 LINKLIB = -lpthread -lcryptopp -L/usr/local/lib
 export COMMON
 export LINKLIB
 
 
-all: checkdir test libnap
+all: checkdir libnap test
 	./output/test
 
 build: checkdir test libnap

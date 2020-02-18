@@ -6,14 +6,14 @@ _NAP_BEGIN
 typedef const char* Key;
 typedef uint8_t* Matrix4x4;
 
-enum AesPadding {
+enum class AesPadding {
 	PKCS5, //填充填充数
 	ISO10126,//最后一位填充填充数，其余随机
 	Zeros,  //0填充解密时不会自动去除
 	PKCS7
 };
 
-enum AesType {
+enum class AesType {
 	ECB,
 	CBC
 };
@@ -69,12 +69,12 @@ private:
 	void addroundkey(uint8_t* matrix4x4, uint32_t* _4rkey);
 
 	uint8_t* iv;
-	uint32_t keyse[44]; //加密密钥矩阵
-	uint32_t keysd[44]; //解密密钥矩阵
+	uint32_t keyse[44] = {0}; //加密密钥矩阵
+	uint32_t keysd[44] = {0}; //解密密钥矩阵
 	const AesPadding padd;
 	const AesType type;	
 
-	Aes(AesPadding, AesType);
+	Aes(AesPadding, AesType) noexcept;
 
 };
 

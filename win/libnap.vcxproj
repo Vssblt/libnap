@@ -160,12 +160,14 @@
   <ItemGroup>
     <ClInclude Include="..\src\aes.h" />
     <ClInclude Include="..\src\binstream.h" />
+    <ClInclude Include="..\src\hash.h" />
     <ClInclude Include="..\src\libnap.h" />
     <ClInclude Include="..\src\nap_common.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\aes.cpp" />
     <ClCompile Include="..\src\binstream.cpp" />
+    <ClCompile Include="..\src\hash.cpp" />
     <ClCompile Include="..\src\nap_common.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -83,16 +83,16 @@ binstream Aes::encode(const char* plaintext, int len){
 	uint8_t filllength = l_space - len;
 	
 	switch (this->padd) {
-	case PKCS5:
-	case PKCS7:
+	case AesPadding::PKCS5:
+	case AesPadding::PKCS7:
 		memset(space + len, filllength, filllength);
 		break;
-	case ISO10126:
+	case AesPadding::ISO10126:
 		space[l_space - 1] = filllength;
 		for (int i = len; i < l_space - 1; i++)
-			space[i] = random<uint16_t>(0,255); //c++ random not support uint8_t
+			space[i] = (uint8_t)random<uint16_t>(0,255); //c++ random not support uint8_t
 		break;
-	case Zeros:
+	case AesPadding::Zeros:
 		memset(space + len, 0x00, filllength);
 		break;
 	default:
@@ -122,7 +122,7 @@ binstream Aes::encode(const char* plaintext, int len){
 			char2matrix4x4(matrix4x4, space + i * 16);
 			_16encode(matrix4x4);
 			char2matrix4x4(space + i * 16, matrix4x4);
-			_piv = space + i * 16, 16;
+			_piv = space + i * 16;
 		}
 	}
 	else {
@@ -179,11 +179,11 @@ bool Aes::decode(const char* ciphertext, int len, binstream& b) {
 	//根据填充去除填充
 	int real_length = len;
 	switch (this->padd) {
-	case PKCS5:
-	case PKCS7:
-	case ISO10126:
+	case AesPadding::PKCS5:
+	case AesPadding::PKCS7:
+	case AesPadding::ISO10126:
 		real_length -= buffer[len - 1];
-	case Zeros:
+	case AesPadding::Zeros:
 		//0填充无法确定数量，无法去除
 		break;
 	default:
@@ -384,7 +384,7 @@ uint8_t Aes::g_num(uint8_t u, uint8_t v) {//两字节的伽罗华域乘法运算
 	return p;
 }
 void Aes::mixcolumns(uint8_t* matrix4x4){
-	uint8_t tmp[4][4];
+	uint8_t tmp[4][4] = { {0} };
 	for (int i = 0; i < 16;i++)
 		*((uint8_t*)tmp+i) = matrix4x4[i];
 
@@ -399,7 +399,7 @@ void Aes::mixcolumns(uint8_t* matrix4x4){
 	}
 }
 void Aes::invmixcolumns(uint8_t* matrix4x4){
-	uint8_t tmp[4][4];
+	uint8_t tmp[4][4] = { {0} };
 	for (int i = 0; i < 16; i++)
 		*((uint8_t*)tmp + i) = matrix4x4[i];
 
@@ -426,11 +426,10 @@ void Aes::addroundkey(uint8_t* matrix4x4, uint32_t* _4rkey){
 	}
 }
 
-Aes::Aes(AesPadding p, AesType t) :
+Aes::Aes(AesPadding p, AesType t) noexcept :
 	padd(p),
 	type(t),
 	iv(nullptr){
-
 }
 
 
