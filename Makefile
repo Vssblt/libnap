@@ -1,5 +1,5 @@
 COMMON = -std=c++11 -W -Wall -O0 $(Mco) 
-LINKLIB = -lpthread -lcryptopp -L/usr/local/lib
+LINKLIB = -lpthread -L/usr/local/lib
 export COMMON
 export LINKLIB
 

@@ -51,18 +51,18 @@ bool aes_test() {
 	for (int i = 0; i < 100; i++) {
 		const char* p = "aabbccddwweerrttnddwweerrttnmp";
 		auto c = aes.encode(p, strlen(p));
-		binstream b;
-		aes.decode((const char*)c.ustr(), c.len(), b);
-		assert(b == p);
+		//binstream b;
+		//aes.decode((const char*)c.ustr(), c.len(), b);
+		//assert(b == p);
 	}
 
 	Aes aes2 = Aes::cipher("@\x12V45678901234TEST", AesPadding::PKCS5, AesType::CBC);
 	for (int i = 0; i < 100; i++) {
 		const char* p2 = "this is a plaintext....";
 		auto c2 = aes2.encode(p2, strlen(p2));
-		binstream b2;
-		aes2.decode((const char*)c2.ustr(), c2.len(), b2);
-		assert(b2 == p2);
+		//binstream b2;
+		//aes2.decode((const char*)c2.ustr(), c2.len(), b2);
+		//assert(b2 == p2);
 	}
 
 
@@ -97,6 +97,51 @@ bool sha256_test() {
 
 	return true;
 }
+bool binstream_test() {
+	for (int i = 0; i < 1000; i++) {
+
+		binstream str;
+		binstream str_2(100);
+		str = "Whatever is worth doing is worth doing well.";
+		//cout << str;
+		str = std::string("In love folly is always sweet.");
+		//cout << endl<<str<<endl;
+
+		str.reserve(100);
+		str.append("hello world", 11);
+		str.append(string("\nThis is the NapStream"));
+		//cout << str.toStdString() <<endl;
+		const char* teststr = "hello world\nThis is the NapStream";
+
+		//operate ==
+		assert(str == teststr);
+		assert(str == str.toStdString());
+
+		//construct
+		assert(str == binstream(teststr));
+		assert(str == binstream(string(teststr)));
+		assert(str == binstream(teststr, strlen(teststr)));
+		assert(str == binstream(std::move(binstream(str))));
+
+		assert(str == str);
+		assert(memcmp(str.str(), teststr, strlen(teststr)) == 0);
+
+		//operate=
+		str_2 = str;
+		assert(str_2.toStdString() == str.toStdString());
+
+
+		str_2.fill('-', 10);
+		//cout << str_2 << endl;
+		for (int i = 9; i > 0; i--) {
+			str_2.resize(i);
+			//cout << str_2 << endl;
+		}
+
+	}
+	return true;
+}
+
 
 #define START startTime = clock();{
 #define END }endTime = clock();
@@ -115,6 +160,14 @@ int main() {
 	assert(sha256_test());
 	END
 	PRINTT("SHA256",200)
+
+	START
+	assert(binstream_test());
+	END
+	PRINTT("Binstream", 1000)
+
+
+		
 
 #ifndef LINUX
 	auto no_use = _getch();

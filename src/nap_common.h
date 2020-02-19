@@ -20,6 +20,7 @@
 #include <stdint.h>
 
 
+
 typedef unsigned char byte;
 
 #define _NAP_BEGIN namespace nap{
@@ -99,6 +100,15 @@ inline T random(T min, T max){
 	return dice();
 }
 
+template<class T>
+inline T max(T a, T b) {
+	return (a > b) ? a : b;
+}
+
+template<class T>
+inline T min(T a, T b) {
+	return (a < b) ? a : b;
+}
 
 _NAP_END
 
