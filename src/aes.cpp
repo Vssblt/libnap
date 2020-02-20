@@ -428,8 +428,7 @@ void Aes::addroundkey(uint8_t* matrix4x4, uint32_t* _4rkey){
 
 Aes::Aes(AesPadding p, AesType t) noexcept :
 	padd(p),
-	type(t),
-	iv(nullptr){
+	type(t){
 }
 
 
@@ -437,9 +436,9 @@ Aes::~Aes(){
 	delete iv;
 }
 
-Aes::Aes(Aes&& old):
+Aes::Aes(Aes&& old) noexcept  :
 	padd(old.padd),
-	type(old.type)
+	type(old.type) 
 {
 	this->iv = old.iv;
 	old.iv = nullptr;

@@ -50,19 +50,19 @@ bool aes_test() {
 	Aes aes = Aes::cipher("1\x12V4567890123456", AesPadding::PKCS5, AesType::ECB);
 	for (int i = 0; i < 100; i++) {
 		const char* p = "aabbccddwweerrttnddwweerrttnmp";
-		auto c = aes.encode(p, strlen(p));
-		//binstream b;
-		//aes.decode((const char*)c.ustr(), c.len(), b);
-		//assert(b == p);
+		binstream c = aes.encode(p, strlen(p));
+		binstream b;
+		aes.decode((const char*)c.str(), c.size(), b);
+		assert(b == p);
 	}
 
 	Aes aes2 = Aes::cipher("@\x12V45678901234TEST", AesPadding::PKCS5, AesType::CBC);
 	for (int i = 0; i < 100; i++) {
 		const char* p2 = "this is a plaintext....";
 		auto c2 = aes2.encode(p2, strlen(p2));
-		//binstream b2;
-		//aes2.decode((const char*)c2.ustr(), c2.len(), b2);
-		//assert(b2 == p2);
+		binstream b2;
+		aes2.decode((const char*)c2.str(), c2.size(), b2);
+		assert(b2 == p2);
 	}
 
 
@@ -85,12 +85,11 @@ bool sha256_test() {
 		for (int i = 1; i < 2; i++) {
 			SHA256 S;
 			S.add(str[i], strlen(str[i]));
-			uint8_t* sha256 = S.calculator();
+			binstream sha256 = S.calculator();
 
-			int len = 32;
-			uint8_t* bufer = hex.hex(sha256, len);
+			binstream sha256_hex = hex.hex(sha256);
 
-			if (strncmp((char*)bufer, s256[i], 64) != 0)
+			if (strncmp((char*)sha256_hex.str(), s256[i], 64) != 0)
 				return false;
 		}
 	}
@@ -147,9 +146,14 @@ bool binstream_test() {
 #define END }endTime = clock();
 #define PRINTT(MNAME,C) cout << MNAME<<" "<< (double)clock() / CLOCKS_PER_SEC / C<< "ps" << endl;
 
+void use(clock_t){}
+
+
 int main() {
 
-	clock_t startTime, endTime;
+	clock_t startTime=0, endTime=0;
+	use(startTime);
+	use(endTime);
 
 	START
 		assert(aes_test());

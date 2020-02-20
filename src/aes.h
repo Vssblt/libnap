@@ -30,7 +30,7 @@ public:
 	bool decode(const char* ciphertext,int len,binstream&);
 
 	~Aes();
-	Aes(Aes&&);
+	Aes(Aes&&) noexcept;
 private:
 	////ECB模式的加密解密
 	//void ecb_encode();
@@ -68,11 +68,11 @@ private:
 	//轮密钥加
 	void addroundkey(uint8_t* matrix4x4, uint32_t* _4rkey);
 
-	uint8_t* iv;
+	uint8_t* iv = nullptr;
 	uint32_t keyse[44] = {0}; //加密密钥矩阵
 	uint32_t keysd[44] = {0}; //解密密钥矩阵
 	const AesPadding padd;
-	const AesType type;	
+	const AesType type;
 
 	Aes(AesPadding, AesType) noexcept;
 
