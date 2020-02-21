@@ -5,6 +5,7 @@
 
 #include <time.h>
 #include "aes.h"
+#include <fstream>
 #include "hash.h"
 
 using namespace std;
@@ -68,7 +69,6 @@ bool aes_test() {
 
 	return true;
 }
-
 bool sha256_test() {
 
 	const char str[][512] = { 
@@ -78,6 +78,7 @@ bool sha256_test() {
 	const char s256[][65] = {
 	"936A185CAAA266BB9CBE981E9E05CB78CD732B0B3280EB944412BB6F8F8F07AF",
 	"37F8615468B36A2DBA75D2C32E3FD8F552A083E051310FE42EA199281C0D15D4",
+	"A4F0DAC980948344E73D2F9E0AA165032878FA7FE64D6A020E168E3E55EB141A"
 	};
 
 	Hex hex;
@@ -92,6 +93,14 @@ bool sha256_test() {
 			if (strncmp((char*)sha256_hex.str(), s256[i], 64) != 0)
 				return false;
 		}
+		SHA256 S;
+		S.add(str[0], strlen(str[0]));
+		S.add(str[1], strlen(str[1]));
+		binstream sha256 = S.calculator();
+		binstream sha256_hex = hex.hex(sha256);
+		if (strncmp((char*)sha256_hex.str(), s256[2], 64) != 0)
+			return false;
+		
 	}
 
 	return true;
@@ -171,7 +180,6 @@ int main() {
 	PRINTT("Binstream", 1000)
 
 
-		
 
 #ifndef LINUX
 	auto no_use = _getch();

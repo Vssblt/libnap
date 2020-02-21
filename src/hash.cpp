@@ -98,23 +98,22 @@ binstream SHA256::calculator(){
 void SHA256::add(const char* data, uint32_t len){
 		//计算增加进来的sha256值
 		//如果多余64就先缓存起来
-		while (len > 0) {
-			uint32_t need = 64 - sha256_buffer_len;
-			if (len >= need) {
-				memcpy(sha256_buffer, data, need);
-				calSHA256();
-				data += need;
-				len -= need;
-				sha256_buffer_len = 0;
+	while (len > 0) {
+		uint32_t need = 64 - sha256_buffer_len;
+		if (len >= need) {
+			memcpy(sha256_buffer + sha256_buffer_len, data, need);
+			calSHA256();
+			data += need;
+			len -= need;
+			sha256_buffer_len = 0;
+		}else {
+			if (len != 0) {
+				memcpy(sha256_buffer + sha256_buffer_len, data, len);
+				sha256_buffer_len += len;
 			}
-			else {
-				if (len != 0) {
-					memcpy(sha256_buffer + sha256_buffer_len, data, len);
-					sha256_buffer_len += len;
-				}
-				break;
-			}
-		};
+			break;
+		}
+	};
 }
 
 void SHA256::calSHA256(){
@@ -183,8 +182,6 @@ Hex::Hex(){
 Hex::~Hex(){
 	delete[] buffer;
 }
-
-
 
 uint8_t* Hex::hex(const void* memory, int& len){
 	if (buffer != nullptr) {
