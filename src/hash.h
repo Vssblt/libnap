@@ -31,19 +31,4 @@ private:
 
 
 
-class Hex{
-public:
-	Hex();
-	~Hex();
-
-	uint8_t* hex(const void* memory, int& len);
-	binstream hex(binstream& mem);
-
-private:
-
-	uint8_t* buffer;
-	uint32_t length;
-};
-
-
 _NAP_END

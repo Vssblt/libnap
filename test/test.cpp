@@ -1,12 +1,11 @@
-#include "../src/libnap.h"
+#include "libnap.h"
 #ifdef  WINDOWS
 	#include <conio.h>
 #endif //  WINDOWS
 
 #include <time.h>
-#include "aes.h"
 #include <fstream>
-#include "hash.h"
+
 
 using namespace std;
 using namespace nap;
@@ -48,24 +47,42 @@ Mysql API
 
 
 bool aes_test() {
-	Aes aes = Aes::cipher("1\x12V4567890123456", AesPadding::PKCS5, AesType::ECB);
+
+
+
+	//ECB
+	Aes aes = Aes::cipher("12V4567890123456", AesPadding::PKCS5, AesType::ECB);
+	Hex hex;
 	for (int i = 0; i < 100; i++) {
 		const char* p = "aabbccddwweerrttnddwweerrttnmp";
 		binstream c = aes.encode(p, strlen(p));
+
+		binstream c_hex = hex.toHex(c);
+		binstream r = "34c5b033c16f1f3d45f98783a9422418a039b48a4f6ff28a46d16991e1c29820";
+		assert(r == c_hex);
+		
 		binstream b;
 		aes.decode((const char*)c.str(), c.size(), b);
 		assert(b == p);
 	}
 
-	Aes aes2 = Aes::cipher("@\x12V45678901234TEST", AesPadding::PKCS5, AesType::CBC);
+	
+
+	//CBC
+	Aes aes2 = Aes::cipher("1111111111111111", 
+		AesPadding::PKCS5, AesType::CBC,"1111111111111111");
 	for (int i = 0; i < 100; i++) {
 		const char* p2 = "this is a plaintext....";
 		auto c2 = aes2.encode(p2, strlen(p2));
+
+		binstream c2_hex = hex.toHex(c2);
+		binstream r2 = "c2b1bc7811375043abce3b41d21c2988cd1bf646ab85eb91de4ed6dbfa706f0c";
+		assert(r2 == c2_hex);
+
 		binstream b2;
 		aes2.decode((const char*)c2.str(), c2.size(), b2);
 		assert(b2 == p2);
 	}
-
 
 	return true;
 }
@@ -88,7 +105,7 @@ bool sha256_test() {
 			S.add(str[i], strlen(str[i]));
 			binstream sha256 = S.calculator();
 
-			binstream sha256_hex = hex.hex(sha256);
+			binstream sha256_hex = hex.toHex(sha256,true);
 
 			if (strncmp((char*)sha256_hex.str(), s256[i], 64) != 0)
 				return false;
@@ -97,7 +114,7 @@ bool sha256_test() {
 		S.add(str[0], strlen(str[0]));
 		S.add(str[1], strlen(str[1]));
 		binstream sha256 = S.calculator();
-		binstream sha256_hex = hex.hex(sha256);
+		binstream sha256_hex = hex.toHex(sha256,true);
 		if (strncmp((char*)sha256_hex.str(), s256[2], 64) != 0)
 			return false;
 		
@@ -179,6 +196,9 @@ int main() {
 	END
 	PRINTT("Binstream", 1000)
 
+	//binstream b("ABCDE");
+	//auto i = Base64::encode(b);
+	//cout << Base64::decode(i);
 
 
 #ifndef LINUX

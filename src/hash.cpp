@@ -171,41 +171,5 @@ void SHA256::calSHA256(){
 
 }
 
-///////----------------hex
-#define HEX_TRANS(x) (((x)>0x09)?((x)+0x37):((x)|0x30))
-
-Hex::Hex(){
-	buffer = nullptr;
-	length = 0;
-}
-
-Hex::~Hex(){
-	delete[] buffer;
-}
-
-uint8_t* Hex::hex(const void* memory, int& len){
-	if (buffer != nullptr) {
-		delete buffer;
-		buffer = nullptr;
-	}
-
-	buffer = new uint8_t[len * 2LL];
-	length = len * 2;
-
-	const uint8_t* _m = (uint8_t*)memory;
-	for (int i = 0; i < len; i++) {
-		buffer[i * 2] = HEX_TRANS(_m[i] >> 4);
-		buffer[i * 2 + 1] = HEX_TRANS(_m[i] & 0x0F);
-	}
-
-	len = length;
-	return buffer;
-}
-
-binstream Hex::hex(binstream& mem){
-	int len = mem.size();
-	hex(mem.str(), len);
-	return std::move(binstream(buffer,len));
-}
 
 _NAP_END

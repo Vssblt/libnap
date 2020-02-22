@@ -14,7 +14,7 @@ functions:
 	append
 	construct
 
-	缺少很多函数 例如 renew reserve
+	可以重载 [] 支持负数
 
 */
 _NAP_BEGIN
@@ -33,8 +33,7 @@ _NAP_BEGIN
 //	binstream substr(int pos, int length);
 
 ////foreach support
-//	uint8_t* begin() { return content; }
-//	uint8_t* end(){return content+length;}
+//	
 //
 
 
@@ -44,8 +43,17 @@ class NapStream {
 public:
 
 //constructor
+	static NapStream shift(char** buffer, SIZET len) {
+		NapStream<ST,SIZET> naps;
+		naps.capacity = len;
+		naps.length = len;
+		naps.content = (ST*)(*buffer);
+		*buffer = nullptr;
+		return std::move(naps);
+	}
 
 	NapStream() {};
+
 	NapStream(const void* c, SIZET len)noexcept {
 		_append((const ST*)(c), len);
 	}
@@ -193,11 +201,11 @@ public:
 			(const char* const)(content),
 			(const size_t)(length)
 		);
-		return move(ret);
+		return std::move(ret);
 	}
 
 	//获取不带0结尾的字符串
-	inline const ST* str() const{ 
+	inline ST* str() const{ 
 		return content;
 	};
 
@@ -205,6 +213,16 @@ public:
 	inline char* sstr() {
 		return (char*)(content);
 	};
+
+	//获取第一个字符的地址
+	uint8_t* begin() { 
+		return (uint8_t*)content;
+	}
+
+	//获取最后一个字符的下一个地址
+	uint8_t* end(){
+		return (uint8_t*)content+length;
+	}
 
 	~NapStream() {
 		delete[] content;
