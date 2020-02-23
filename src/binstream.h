@@ -15,11 +15,6 @@ functions:
 	construct
 
 	+=
-	+
-	==
-	!=
-	=
-
 
 	可以重载 [] 支持负数
 
@@ -27,12 +22,10 @@ functions:
 _NAP_BEGIN
 
 //	binstream& operator+=(const char*)noexcept;
-//	binstream& operator+=(const uint8_t*)noexcept;
 //	binstream& operator+=(const binstream&)noexcept;
 //	binstream& operator+=(const std::string&)noexcept;
 //
 //	binstream& operator<<(const char*);
-//	binstream& operator<<(const uint8_t*);
 //	binstream& operator<<(const binstream&);
 //	binstream& operator<<(const std::string&);
 
@@ -48,7 +41,16 @@ template<class ST,class SIZET = uint32_t>
 class NapStream {
 public:
 
-//constructor
+#pragma region binstream transfer
+
+	template <class T>
+	static NapStream from(T n) {
+		return NapStream(std::to_string(n));
+	}
+
+#pragma endregion
+
+#pragma region binstream construct
 	static NapStream shift(char** buffer, SIZET len) {
 		NapStream<ST,SIZET> naps;
 		naps.capacity = len;
@@ -92,13 +94,56 @@ public:
 		old.length = 0;
 		old.content = nullptr;
 	}
+#pragma endregion
+
+#pragma region binstream operate
 
 
-//operate ==
+	friend NapStream operator+(const char* s1, NapStream& s2) {
+		size_t len = strlen(s1);
+		NapStream ret(len + s2.size());
+		ret.append(s1,len);
+		ret.append(s2);
+		return ret;
+	}
+	friend NapStream operator+(NapStream& s1,const char* s2) {
+		size_t len = strlen(s2);
+		NapStream ret(len + s1.size());
+		ret.append(s1);
+		ret.append(s2,len);
+		return ret;
+	}
+	friend NapStream operator+(const std::string& s1, NapStream& s2) {
+		NapStream ret(s1.size() + s2.size());
+		ret.append(s1);
+		ret.append(s2);
+		return ret;
+	}
+	friend NapStream operator+(NapStream& s1, const std::string& s2) {
+		NapStream ret(s2.size() + s1.size());
+		ret.append(s1);
+		ret.append(s2);
+		return ret;
+	}
+
+	NapStream operator+(const NapStream& s) {
+		NapStream ret(size() + s.size());
+		ret.append(*this);
+		ret.append(s);
+		return ret;
+	}
+
+
+#pragma endregion +
+
+#pragma region binstream operate
 	bool operator==(const NapStream& o) {
 		if (&o == this) return true;
 		if (o.length != this->length) return false;
 		return (0 == memcmp(o.content, this->content, length));
+	}
+	bool operator!=(const NapStream& o) {
+		return !(*this == o);
 	}
 
 	bool operator==(const void* str) {
@@ -106,14 +151,21 @@ public:
 		if (this->length != len) return false;
 		return (0 == memcmp(str, this->content, length));
 	}
+	bool operator!=(const void* str) {
+		return !(*this == str);
+	}
 
 	bool operator==(const std::string& str) {
 		SIZET len = static_cast<SIZET>(str.size());
 		if (this->length != len) return false;
 		return (0 == memcmp(str.c_str(), this->content, length));
 	}
+	bool operator!=(const std::string& str) {
+		return !(*this == str);
+	}
+#pragma endregion  == / != 
 
-//operate=
+#pragma region binstream operate
 	NapStream& operator=(const NapStream& old) noexcept {
 		if (&old != this) {
 			this->clean();
@@ -135,9 +187,9 @@ public:
 			static_cast<const SIZET>(strlen(str)));
 		return *this;
 	}
+#pragma endregion  =
 
-
-//setter
+#pragma region binstream setter
 
 	//填充指定长度字符，会删除以前字符串内容
 	void fill(ST c, SIZET len) {
@@ -163,10 +215,16 @@ public:
 	void append(const void* c, SIZET len) {
 		_append(static_cast<const ST*>(c), len);
 	}
-	void append(const std::string str) {
+	void append(const std::string& str) {
 		_append(
 			(const ST*)(str.c_str()), 
 			(const SIZET)str.length()
+		);
+	}
+	void append(const NapStream& str) {
+		_append(
+			str.content,
+			str.size()
 		);
 	}
 
@@ -175,21 +233,18 @@ public:
 		length = 0;
 	}
 
-	//返回长度是否为0
-	inline bool empty() noexcept {
-		return (length == 0);
-	}
 
-//getter
+#pragma endregion
 
-	
+#pragma region binstream getter
+
 	inline SIZET size() const { return length; }
 	inline SIZET cap() const { return capacity; }
 
 	//获取指定位置字符，越界抛出异常
 	ST at(SIZET pos) {
-		if (pos >= length) {
-			throw pos;
+		if (pos >= length || pos < 0) {
+			throw "Index out of bounds";
 			return 0;
 		}else {
 			return content[pos];
@@ -198,6 +253,14 @@ public:
 
 	//获取指定位置字符，不进行越界检查
 	ST& operator[](SIZET pos) noexcept{
+		return content[pos];
+	}
+
+	//获取指定位置字符，越界会回溯
+	ST& operator()(int pos) noexcept {
+		pos = pos % (int)length;
+		if (pos < 0)
+			pos = length + pos;
 		return content[pos];
 	}
 
@@ -230,12 +293,13 @@ public:
 		return (uint8_t*)content+length;
 	}
 
-	~NapStream() {
-		delete[] content;
-		content = nullptr;
+	//返回长度是否为0
+	inline bool empty() noexcept {
+		return (length == 0);
 	}
+#pragma endregion
 
-//friend
+#pragma region binstream operate
 
 	friend std::ostream& operator<<(std::ostream& out, const NapStream& b) {
 		out.write((const char*)b.content, b.length);
@@ -249,6 +313,13 @@ public:
 			b.append((const char*)c,1);
 		}
 		return is;
+	}
+
+#pragma endregion out<<str  in>>str
+
+	~NapStream() {
+		delete[] content;
+		content = nullptr;
 	}
 
 protected:
@@ -353,12 +424,10 @@ protected:
 		}	
 	}
 
-
 private:
 
 	ST* content = nullptr;
 	SIZET capacity = 0; //content length
-
 	SIZET length = 0;   //string length
 
 };

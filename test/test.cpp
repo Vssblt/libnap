@@ -96,50 +96,53 @@ Mysql API
 //
 //	return true;
 //}
-//bool binstream_test() {
-//	for (int i = 0; i < 1000; i++) {
-//
-//		binstream str;
-//		binstream str_2(100);
-//		str = "Whatever is worth doing is worth doing well.";
-//		//cout << str;
-//		str = std::string("In love folly is always sweet.");
-//		//cout << endl<<str<<endl;
-//
-//		str.reserve(100);
-//		str.append("hello world", 11);
-//		str.append(string("\nThis is the NapStream"));
-//		//cout << str.toStdString() <<endl;
-//		const char* teststr = "hello world\nThis is the NapStream";
-//
-//		//operate ==
-//		assert(str == teststr);
-//		assert(str == str.toStdString());
-//
-//		//construct
-//		assert(str == binstream(teststr));
-//		assert(str == binstream(string(teststr)));
-//		assert(str == binstream(teststr, strlen(teststr)));
-//		assert(str == binstream(std::move(binstream(str))));
-//
-//		assert(str == str);
-//		assert(memcmp(str.str(), teststr, strlen(teststr)) == 0);
-//
-//		//operate=
-//		str_2 = str;
-//		assert(str_2.toStdString() == str.toStdString());
-//
-//
-//		str_2.fill('-', 10);
-//		//cout << str_2 << endl;
-//		for (int i = 9; i > 0; i--) {
-//			str_2.resize(i);
-//			//cout << str_2 << endl;
-//		}
-//
-//	}
-//	return true;
-//}
+
+bool binstream_test() {
+	for (int i = 0; i < 1000; i++) {
+
+		binstream str;
+		binstream str_2(100);
+		str = "Whatever is worth doing is worth doing well.";
+		//cout << str;
+		str = std::string("In love folly is always sweet.");
+		//cout << endl<<str<<endl;
+
+		str.reserve(100);
+		str.append("hello world", 11);
+		str.append(string("\nThis is the NapStream"));
+		//cout << str.toStdString() <<endl;
+		const char* teststr = "hello world\nThis is the NapStream";
+
+		//operate ==
+		assert(str == teststr);
+		assert(str == str.toStdString());
+		assert(!(str != teststr));
+		assert(!(str != str.toStdString()));
+
+		//construct
+		assert(str == binstream(teststr));
+		assert(str == binstream(string(teststr)));
+		assert(str == binstream(teststr, strlen(teststr)));
+		assert(str == binstream(std::move(binstream(str))));
+
+		assert(str == str);
+		assert(memcmp(str.str(), teststr, strlen(teststr)) == 0);
+
+		//operate=
+		str_2 = str;
+		assert(str_2.toStdString() == str.toStdString());
+
+
+		str_2.fill('-', 10);
+		//cout << str_2 << endl;
+		for (int i = 9; i > 0; i--) {
+			str_2.resize(i);
+			//cout << str_2 << endl;
+		}
+
+	}
+	return true;
+}
 
 
 //#define START startTime = clock();{
@@ -149,6 +152,8 @@ Mysql API
 //void use(clock_t){}
 
 int main() {
+
+	assert(binstream_test());
 
 	try {
 		Unit unit64("BASE64");
@@ -214,8 +219,6 @@ int main() {
 	catch (const char* e) {
 		cout << "TEST-EXCEPTION: " << e<<endl;
 	}
-
-
 
 	//clock_t startTime=0, endTime=0;
 	//use(startTime);
