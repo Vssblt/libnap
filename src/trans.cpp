@@ -70,7 +70,7 @@ void Hex::to_bin(const void* m, int len){
 const
 char* base64_table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-const
+const 
 uint8_t base64_detable[128] =
 {
 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //   0 -   9
@@ -95,17 +95,9 @@ binstream Base64::encode(binstream& mem, bool safe){
 	int length = (mem.size() / 3 + ((mem.size() % 3 == 0) ? 0 : 1)) * 4;
 	ret.resize(length);
 
-	//块处理函数
-	auto enblock = [](uint8_t* str, uint8_t* base) {
-		*base = base64_table[str[0] >> 2];
-		*(base + 1) = base64_table[(str[0] << 4 | str[1] >> 4) & 0x3f];
-		*(base + 2) = base64_table[(str[1] << 2 | str[2] >> 6) & 0x3f];
-		*(base + 3) = base64_table[str[2] & 0x3f];
-	};
-
 	//处理整字节
 	for (int i = 0; i < mem.size() / 3; i++) {
-		enblock(mem.str() + (i * 3), ret.str() + (i * 4));
+		enblock(mem.str() + (i * 3), ret.str() + (i * 4),base64_table);
 	}
 
 	//确定填充部分
@@ -117,13 +109,13 @@ binstream Base64::encode(binstream& mem, bool safe){
 		switch (mem.size() % 3) {
 		case 1:
 			temp[0] = str_str[0];
-			enblock(temp, b64_str);
+			enblock(temp, b64_str, base64_table);
 			*(ret.end() - 2) = '=';
 			break;
 		case 2:
 			temp[0] = str_str[0];
 			temp[1] = str_str[1];
-			enblock(temp, b64_str);
+			enblock(temp, b64_str, base64_table);
 			break;
 		}
 		*(ret.end() - 1) = '='; //最后一位一定是 = 
@@ -139,17 +131,9 @@ binstream Base64::decode(binstream& base, bool safe){
 	int length = base.size() / 4 * 3;
 	ret.resize(length);
 
-	
-	//块处理函数
-	auto deblock = [det](uint8_t* str, uint8_t* base) {
-		*str = (det[base[0]] << 2) | (det[base[1]] & 0x30) >> 4;
-		*(str + 1) = (det[base[1]] << 4) | (det[base[2]]  >> 2);
-		*(str + 2) = (det[base[2]] << 6) | det[base[3]];
-	};
-
 	//处理处最后一块以外的其他快
 	for (int i = 0; i < (base.size() / 4 - 1); i++) {
-		deblock(ret.str()+(i*3), base.str()+(i*4));
+		deblock(ret.str()+(i*3), base.str()+(i*4),(char*)det);
 	}
 
 	//处理最后一块
@@ -158,18 +142,33 @@ binstream Base64::decode(binstream& base, bool safe){
 		if (*(baseend - 2) == '=') {
 			//填充了两个8bit字符
 			ret.resize(ret.size() - 2);
-			*(ret.end() - 1) = det[baseend[-4]]<<2 | det[baseend[-3]]>>6;
+			// 110 1110
+			*(ret.end() - 1) = (det[baseend[-4]]<<2) | (det[baseend[-3]]>>4);
 		}else {
 			//填充了一个8bit字符
 			ret.resize(ret.size() - 1);
-			*(ret.end() - 2) = det[baseend[-4]] << 2 | det[baseend[-3]] >> 6;
+			*(ret.end() - 2) = det[baseend[-4]] << 2 | det[baseend[-3]] >> 4;
 			*(ret.end() - 1) = det[baseend[-3]] << 4 | det[baseend[-2]] >> 2;
 		}
 	}else {
 		//不是填充
-		deblock(ret.end()-3, base.end()-4);
+		deblock(ret.end()-3, base.end()-4, (char*)det);
 	}
 	return ret;
+}
+
+void Base64::enblock(uint8_t* str, uint8_t* base, const char* ent)
+{
+	*base = ent[str[0] >> 2];
+	*(base + 1) = ent[(str[0] << 4 | str[1] >> 4) & 0x3f];
+	*(base + 2) = ent[(str[1] << 2 | str[2] >> 6) & 0x3f];
+	*(base + 3) = ent[str[2] & 0x3f];
+}
+
+void Base64::deblock(uint8_t* str, uint8_t* base, const char* det){
+	*str = (det[base[0]] << 2) | (det[base[1]] & 0x30) >> 4;
+	*(str + 1) = (det[base[1]] << 4) | (det[base[2]] >> 2);
+	*(str + 2) = (det[base[2]] << 6) | det[base[3]];
 }
 
 

@@ -1,0 +1,36 @@
+9 3 60
+ABC
+safe
+QUJD
+
+ABCD
+safe
+QUJDRA==
+
+ABCDE
+safe
+QUJDREU=
+
+ABCDEF
+safe
+QUJDREVG
+
+While there is life there is hope.
+safe
+V2hpbGUgdGhlcmUgaXMgbGlmZSB0aGVyZSBpcyBob3BlLg==
+
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+safe
+QUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVo=
+
+abcdefghijklmnopqrstuvwxyz
+safe
+YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXo=
+
+1234567890
+safe
+MTIzNDU2Nzg5MA==
+
+ABCDEFGHIJKLMNopqrstuvwxyz1234567890
+safe
+QUJDREVGR0hJSktMTU5vcHFyc3R1dnd4eXoxMjM0NTY3ODkw

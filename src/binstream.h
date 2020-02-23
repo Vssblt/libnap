@@ -14,6 +14,13 @@ functions:
 	append
 	construct
 
+	+=
+	+
+	==
+	!=
+	=
+
+
 	可以重载 [] 支持负数
 
 */
@@ -35,7 +42,6 @@ _NAP_BEGIN
 ////foreach support
 //	
 //
-
 
 
 template<class ST,class SIZET = uint32_t>
@@ -107,7 +113,7 @@ public:
 		return (0 == memcmp(str.c_str(), this->content, length));
 	}
 
-//operate =
+//operate=
 	NapStream& operator=(const NapStream& old) noexcept {
 		if (&old != this) {
 			this->clean();
@@ -323,7 +329,7 @@ protected:
 			return;
 		}
 
-		if (_cap == capacity) {
+		if (_cap <= capacity) {
 			length = _cap;
 			return;
 
