@@ -1,33 +1,8 @@
 #pragma once
 #include "nap_common.h"
 
-/*
-all function need support 
-	char*
-	uchar*
-	string
-	self
 
-functions:
-	set
-	get
-	append
-	construct
-
-	+=
-
-	可以重载 [] 支持负数
-
-*/
 _NAP_BEGIN
-
-//	binstream& operator+=(const char*)noexcept;
-//	binstream& operator+=(const binstream&)noexcept;
-//	binstream& operator+=(const std::string&)noexcept;
-//
-//	binstream& operator<<(const char*);
-//	binstream& operator<<(const binstream&);
-//	binstream& operator<<(const std::string&);
 
 ////字符串操作
 //	binstream substr(int pos, int length);
@@ -36,8 +11,7 @@ _NAP_BEGIN
 //	
 //
 
-
-template<class ST,class SIZET = uint32_t>
+template<class ST,class SIZET = uint64_t>
 class NapStream {
 public:
 
@@ -137,6 +111,22 @@ public:
 #pragma endregion +
 
 #pragma region binstream operate
+
+	void operator+=(const NapStream& o) {
+		append(o);
+	}
+
+	void operator+=(const char* o) {
+		append(o,strlen(o));
+	}
+
+	void operator+=(const std::string& o) {
+		append(o);
+	}
+
+#pragma endregion +=
+
+#pragma region binstream operate
 	bool operator==(const NapStream& o) {
 		if (&o == this) return true;
 		if (o.length != this->length) return false;
@@ -232,7 +222,6 @@ public:
 	inline void clean() noexcept {
 		length = 0;
 	}
-
 
 #pragma endregion
 
