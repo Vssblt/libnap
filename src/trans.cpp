@@ -68,10 +68,13 @@ void Hex::to_bin(const void* m, int len){
 ///////----------------base64
 
 const
-char* base64_table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+char* b64_table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+const
+char* b64_safe_table = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
 const 
-uint8_t base64_detable[128] =
+uint8_t b64_detable[128] =
 {
 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //   0 -   9
 	0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  10 -  19
@@ -88,8 +91,31 @@ uint8_t base64_detable[128] =
 	49, 50, 51,  0,  0,  0,  0,  0		// 120 - 127
 };
 
+const 
+uint8_t b64_safe_detable[128] =
+{
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //   0 -   9
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  10 -  19
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  20 -  29
+	0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  30 -  39
+	0,  0,  0, 0,  0,  62,  0, 0, 52, 53, //  40 -  49
+	54, 55, 56, 57, 58, 59, 60, 61,  0,  0, //  50 -  59
+	0, 61,  0,  0,  0,  0,  1,  2,  3,  4, //  60 -  69
+	5,  6,  7,  8,  9, 10, 11, 12, 13, 14, //  70 -  79
+	15, 16, 17, 18, 19, 20, 21, 22, 23, 24, //  80 -  89
+	25,  0,  0,  0,  0,  63,  0, 26, 27, 28, //  90 -  99
+	29, 30, 31, 32, 33, 34, 35, 36, 37, 38, // 100 - 109
+	39, 40, 41, 42, 43, 44, 45, 46, 47, 48, // 110 - 119
+	49, 50, 51,  0,  0,  0,  0,  0		// 120 - 127
+};
 
 binstream Base64::encode(binstream& mem, bool safe){
+	const char* base64_table = nullptr;
+	if (safe)
+		base64_table = b64_safe_table;
+	else
+		base64_table = b64_table;
+
 	if (mem.size() == 0) return binstream();
 	binstream ret;
 	int length = (mem.size() / 3 + ((mem.size() % 3 == 0) ? 0 : 1)) * 4;
@@ -125,7 +151,12 @@ binstream Base64::encode(binstream& mem, bool safe){
 }
 
 binstream Base64::decode(binstream& base, bool safe){
-	const uint8_t* det = base64_detable;
+	const uint8_t* det = nullptr;
+	if (safe)
+		det = b64_safe_detable;
+	else
+		det = b64_detable;
+
 	if (base.size() == 0) return binstream();
 	binstream ret;
 	int length = base.size() / 4 * 3;

@@ -1,4 +1,20 @@
-9 3 60
+13 3 60
+pt>pt>pt>pt>pt>pt>
+unsafe
+cHQ+cHQ+cHQ+cHQ+cHQ+cHQ+
+
+pt>pt>pt>pt>pt>pt>
+safe
+cHQ-cHQ-cHQ-cHQ-cHQ-cHQ-
+
+has a?F? pt>
+unsafe
+aGFzIGE/Rj8gcHQ+
+
+has a?F? pt>
+safe
+aGFzIGE_Rj8gcHQ-
+
 ABC
 safe
 QUJD
