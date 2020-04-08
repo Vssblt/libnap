@@ -5,3 +5,4 @@
 #include "aes.h"
 #include "hash.h"
 #include "trans.h"
+#include "net.h"

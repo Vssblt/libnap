@@ -24,6 +24,9 @@
     <ClInclude Include="..\src\trans.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\net.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\nap_common.cpp">
@@ -39,6 +42,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\trans.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\net.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

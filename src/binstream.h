@@ -267,11 +267,6 @@ public:
 		return content;
 	};
 
-	//获取不带0结尾的字符串
-	inline char* sstr() {
-		return (char*)(content);
-	};
-
 	//获取第一个字符的地址
 	uint8_t* begin() { 
 		return (uint8_t*)content;
