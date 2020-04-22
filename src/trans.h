@@ -16,11 +16,11 @@ public:
 	binstream toBinary(binstream& mem);
 
 private:
-	void to_hex(const void*, int, bool up);
-	void to_bin(const void*, int);
+	void to_hex(const void*, size_t, bool up);
+	void to_bin(const void*, size_t);
 
 	uint8_t* buffer;
-	uint32_t length;
+	size_t length;
 };
 
 class Base64 {

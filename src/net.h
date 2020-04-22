@@ -187,7 +187,7 @@ private:
 	tcpseraccept() { /*用于无效的accept返回*/ };
 
 	napcom* easycomm = nullptr;
-	struct sockaddr_in sd = {0};
+	struct sockaddr_in sd = {0,0,0,0};
 
 	friend class tcpserver;
 };

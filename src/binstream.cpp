@@ -21,13 +21,11 @@ binstream::binstream(const void* c, size_t len) noexcept {
 }
 
 binstream::binstream(const char* c) noexcept {
-	_append((const uint8_t*)(c),
-		static_cast<const size_t>(strlen(c)));
+	_append((const uint8_t*)(c),strlen(c));
 }
 
 binstream::binstream(const std::string& str) noexcept {
-	_append((const uint8_t*)(str.c_str()),
-		static_cast<const size_t>(str.size()));
+	_append((const uint8_t*)(str.c_str()),str.size());
 }
 
 binstream::binstream(const binstream& old) noexcept {
@@ -79,12 +77,12 @@ binstream& binstream::operator=(const binstream& old) noexcept {
 }
 
 binstream& binstream::operator=(const std::string& str) noexcept {
-	_set((const uint8_t*)(str.c_str()), static_cast<const size_t>(str.size()));
+	_set((const uint8_t*)(str.c_str()), str.size());
 	return *this;
 }
 
 binstream& binstream::operator=(const char* str) noexcept {
-	_set((const uint8_t*)(str), static_cast<const size_t>(strlen(str)));
+	_set((const uint8_t*)(str), strlen(str));
 	return *this;
 }
 
@@ -110,7 +108,7 @@ void binstream::append(const void* c, size_t len) {
 void binstream::append(const std::string& str) {
 	_append(
 		(const uint8_t*)(str.c_str()),
-		(const size_t)str.length()
+		str.length()
 	);
 }
 
@@ -122,7 +120,7 @@ void binstream::append(const binstream& str) {
 }
 
 uint8_t binstream::at(size_t pos){
-	if (pos >= length || pos < 0) {
+	if (pos >= length) {
 		throw "Index out of bounds";
 		return 0;
 	}
@@ -136,17 +134,12 @@ uint8_t& binstream::operator[](size_t pos) noexcept{
 }
 
 uint8_t& binstream::operator()(size_t pos) noexcept{
-	pos = pos % (int)length;
-	if (pos < 0)
-		pos = length + pos;
+	pos = pos % length;
 	return content[pos];
 }
 
 std::string binstream::toStdString(){
-	std::string ret(
-		(const char* const)(content),
-		(const size_t)(length)
-	);
+	std::string ret((const char*)content,length);
 	return std::move(ret);
 }
 
@@ -179,8 +172,6 @@ void binstream::_append(const uint8_t* con, size_t _length){
 	length = _length + length;
 }
 void binstream::_set(const uint8_t* con, size_t _length){
-	assert(_length >= 0);
-	if (_length < 0) return;
 	if (_length == 0) {
 		length = 0;
 		return;
@@ -194,11 +185,10 @@ void binstream::_set(const uint8_t* con, size_t _length){
 }
 
 void binstream::_recap(size_t _cap){
-	assert(_cap > 0);//确保要分配的空间大于0
-	if (_cap <= 0) return;
+	assert(_cap != 0);//确保要分配的空间大于0
 
-	if (_cap < static_cast<size_t>(15))
-		_cap = 15;
+	if (_cap < 15ll)
+		_cap = 15ll;
 
 	if (content != nullptr) {
 		delete[] content;
@@ -211,8 +201,6 @@ void binstream::_recap(size_t _cap){
 }
 
 void binstream::_recap_hold(size_t _cap){
-	if (_cap < 0)
-		return; //如果SIZE_T 是无符号型，此句无效
 	if (_cap == 0) {
 		capacity = 0;
 		length = 0;
@@ -281,8 +269,8 @@ std::ostream& operator<<(std::ostream& out, const binstream& b){
 
 std::istream& operator>>(std::istream& is, binstream& b){
 	while (true) {
-		char c = is.get();
-		if (!c || c == '\n') break;
+		int c[] = { is.get(),0 };
+		if (!c[0] || c[0] == EOF || c[0] == '\n') break;
 		b.append((const char*)c, 1);
 	}
 	return is;

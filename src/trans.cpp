@@ -17,19 +17,18 @@ Hex::Hex(){
 }
 
 binstream Hex::toHex(binstream& mem,bool up){
-	uint32_t len = mem.size();
+	size_t len = mem.size();
 	to_hex(mem.str(), len,up);
 	return (binstream::shift((char**)&buffer,length));
 }
 
 binstream Hex::toBinary(binstream& mem){
-	uint32_t len = mem.size();
-	to_bin(mem.str(), len);
+	to_bin(mem.str(), mem.size());
 	return (binstream::shift((char**)&buffer, length));
 }
 
 //trans to buffer
-void Hex::to_hex(const void* m,int len, bool up) {
+void Hex::to_hex(const void* m, size_t len, bool up) {
 	if (buffer != nullptr) {
 		delete buffer;
 		buffer = nullptr;
@@ -38,13 +37,13 @@ void Hex::to_hex(const void* m,int len, bool up) {
 	buffer = new uint8_t[length];
 	
 	const uint8_t* _m = (uint8_t*)m;
-	for (int i = 0; i < len; i++) {
+	for (size_t i = 0; i < len; i++) {
 		buffer[i * 2] = HEX_TRANS(_m[i] >> 4,up);
 		buffer[i * 2 + 1] = HEX_TRANS(_m[i] & 0x0F,up);
 	}
 }
 
-void Hex::to_bin(const void* m, int len){
+void Hex::to_bin(const void* m, size_t len){
 	if (buffer != nullptr) {
 		delete buffer;
 		buffer = nullptr;
@@ -57,9 +56,9 @@ void Hex::to_bin(const void* m, int len){
 	buffer = new uint8_t[length];
 
 	const uint8_t* _m = (uint8_t*)m;
-	for (int i = 0; i < length; i++) {
+	for (size_t i = 0; i < length; i++) {
 		buffer[i] = (STR_TRANS(_m[i * 2]))<< 4;
-		if (!odd || (i*2+1<len))
+		if (!odd || (i*2ll+1<len))
 			buffer[i] += STR_TRANS(_m[i * 2 + 1]); //还没做偶数次
 	}
 
@@ -118,12 +117,12 @@ binstream Base64::encode(binstream& mem, bool safe){
 
 	if (mem.size() == 0) return binstream();
 	binstream ret;
-	int length = (mem.size() / 3 + ((mem.size() % 3 == 0) ? 0 : 1)) * 4;
+	size_t length = (mem.size() / 3 + ((mem.size() % 3 == 0) ? 0 : 1)) * 4;
 	ret.resize(length);
 
 	//处理整字节
-	for (int i = 0; i < mem.size() / 3; i++) {
-		enblock(mem.str() + (i * 3), ret.str() + (i * 4),base64_table);
+	for (size_t i = 0; i < mem.size() / 3; i++) {
+		enblock(mem.str() + (i * 3ll), ret.str() + (i * 4ll),base64_table);
 	}
 
 	//确定填充部分
@@ -159,12 +158,12 @@ binstream Base64::decode(binstream& base, bool safe){
 
 	if (base.size() == 0) return binstream();
 	binstream ret;
-	int length = base.size() / 4 * 3;
+	size_t length = base.size() / 4 * 3;
 	ret.resize(length);
 
 	//处理处最后一块以外的其他快
-	for (int i = 0; i < (base.size() / 4 - 1); i++) {
-		deblock(ret.str()+(i*3), base.str()+(i*4),(char*)det);
+	for (size_t i = 0; i < (base.size() / 4 - 1); i++) {
+		deblock(ret.str()+(i*3ll), base.str()+(i*4ll),(char*)det);
 	}
 
 	//处理最后一块

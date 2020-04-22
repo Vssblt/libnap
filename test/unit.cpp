@@ -36,7 +36,6 @@ Unit::~Unit(){
 }
 
 void Unit::test(callback cb){
-	int all = num;
 	for (int i = 0; i < num; i++) {
 		bool ret = cb(unit[i], line);
 		if (ret)

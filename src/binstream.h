@@ -14,14 +14,14 @@ _NAP_BEGIN
 class binstream {
 public:
 
-#pragma region binstream transfer
+//#pragma region binstream transfer
 
 	template <class T>
 	static binstream from(T n);
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region binstream construct
+//#pragma region binstream construct
 	static binstream shift(char** buffer, size_t len);
 
 	binstream() {};
@@ -32,9 +32,9 @@ public:
 	explicit binstream(const binstream& old) noexcept;
 
 	binstream(binstream&& old) noexcept;
-#pragma endregion
+//#pragma endregion
 
-#pragma region binstream operate
+//#pragma region binstream operate
 
 	friend binstream operator+(const char* s1, binstream& s2);
 	friend binstream operator+(binstream& s1, const char* s2);
@@ -43,17 +43,17 @@ public:
 
 	binstream operator+(const binstream& s);
 
-#pragma endregion +
+//#pragma endregion +
 
-#pragma region binstream operate
+//#pragma region binstream operate
 
 	void operator+=(const binstream& o) {append(o);}
 	void operator+=(const char* o) {append(o,strlen(o));}
 	void operator+=(const std::string& o) {append(o);}
 
-#pragma endregion +=
+//#pragma endregion +=
 
-#pragma region binstream operate
+//#pragma region binstream operate
 
 	bool operator==(const binstream& o);
 	inline bool operator!=(const binstream& o) {return !(*this == o);}
@@ -64,17 +64,17 @@ public:
 	bool operator==(const std::string& str);
 	inline bool operator!=(const std::string& str) {return !(*this == str);}
 
-#pragma endregion  == / != 
+//#pragma endregion  == / != 
 
-#pragma region binstream operate
+//#pragma region binstream operate
 
 	binstream& operator=(const binstream& old) noexcept;
 	binstream& operator=(const std::string& str) noexcept;
 	binstream& operator=(const char* str) noexcept;
 
-#pragma endregion  =
+//#pragma endregion  =
 
-#pragma region binstream setter
+//#pragma region binstream setter
 
 	//填充指定长度字符，会删除以前字符串内容
 	void fill(uint8_t c, size_t len);
@@ -95,9 +95,9 @@ public:
 	//将长度设置为0
 	void clean() noexcept {length = 0;}
 
-#pragma endregion
+//#pragma endregion
 
-#pragma region binstream getter
+//#pragma region binstream getter
 
 	inline size_t size() const { return length; }
 	inline size_t cap() const { return capacity; }
@@ -125,14 +125,14 @@ public:
 
 	//返回长度是否为0
 	inline bool empty() noexcept {return (length == 0);}
-#pragma endregion
+//#pragma endregion
 
-#pragma region binstream operate
+//#pragma region binstream operate
 
 	friend std::ostream& operator<<(std::ostream& out, const binstream& b);
 	friend std::istream& operator>>(std::istream& is, binstream& b);
 
-#pragma endregion out<<str  in>>str
+//#pragma endregion out<<str  in>>str
 
 	~binstream();
 protected:

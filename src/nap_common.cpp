@@ -18,7 +18,7 @@ void msleep(uint64_t millisecond) {
 #endif
 
 #ifdef WINDOWS
-	Sleep(millisecond);
+	Sleep((DWORD)millisecond);
 #endif
 }
 

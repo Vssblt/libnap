@@ -1,5 +1,4 @@
 #include "net.h"
-#pragma warning(disable:4996)
 _NAP_BEGIN
 
 
@@ -16,7 +15,7 @@ void net::init(){
 }
 
 sockaddr_in net::make_addr(uint16_t port, const char* ip){
-	sockaddr_in addr = {0};
+	sockaddr_in addr = { 0,0,0,{0} };
 	addr.sin_addr.s_addr = (ip == nullptr) ? INADDR_ANY : inet_addr(ip);
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
@@ -93,7 +92,8 @@ uint32_t net::getnIp(sockaddr_in& object){
 int32_t net::close(socket_t socket){
 
 #ifdef LINUX
-	shutdown(socket, SHUT_RDWR);
+	//linux需要shutdown才能使recv返回
+	shutdown(socket, SHUT_RDWR); 
 	int32_t r =  ::close(socket);
 #endif
 
@@ -165,6 +165,13 @@ napcom::~napcom() {
 	state = false;
 	if (thandler->joinable())
 		thandler->join();
+	//thandler->detach();
+	/*
+		detach可以防止程序卡在RAII资源销毁的末尾
+		但是会使隐藏的bug不被发现，导致线程未结束时
+		this指针已经失效，造成错误内存访问，或线程
+		资源浪费导致内存泄漏
+	*/
 	delete thandler;
 }
 
@@ -178,11 +185,13 @@ napcom::napcom(socket_t&& n) {
 napcom::ret napcom::sendpackage(binstream& package){
 	if (state == false)
 		return ret::ruined;
-	if (package.size() > 65536)
+	uint32_t package_size = (uint32_t)package.size();
+	if (package_size > 0xffff)
 		return ret::mecismsend;
-	uint32_t length = package.size();
+	
+	uint32_t length = package_size;
 	length <<= 16;
-	length += package.size();
+	length += package_size;
 
 	bool r = net::sendInsist(
 		net, (char*)&length, 4);
@@ -192,7 +201,7 @@ napcom::ret napcom::sendpackage(binstream& package){
 		return ret::ruined;
 	}
 	r = net::sendInsist(
-		net, (char*)package.str(),package.size());
+		net, (char*)package.str(), package_size);
 	if (!r) {
 		//网络连接异常
 		state = false;
@@ -215,14 +224,14 @@ void napcom::recvhandle(){
 		uint32_t head;
 		bool r = net::recvInsist(net, (char*)&head, 4);
 		if (!r) {
-			//网络连接异常
+			//网络连接异常，或socket资源已关闭
 			state = false;
 			break;
 		}
 		uint16_t h;
 		uint16_t l;
 		h = head >> 16;
-		l = head & 0x00ff;
+		l = head & 0x0000ffff;
 		if (h != l) {
 			state = false;
 			break;
@@ -231,7 +240,7 @@ void napcom::recvhandle(){
 		data.resize(h);
 		r = net::recvInsist(net, (char*)data.str(), h);
 		if (!r) {
-			//网络连接异常
+			//网络连接异常，或socket资源已关闭
 			state = false;
 			break;
 		}
