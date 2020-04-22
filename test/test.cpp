@@ -11,13 +11,11 @@ using namespace nap;
 
 /*
 
-网络
 内存池(gc)
 线程池
 反射
 日志
 反射
-Mysql API
 */
 
 
@@ -85,12 +83,46 @@ bool net_test() {
 	return true;
 }
 
+bool netser_test() {
+	tcpserver server(8087);
+
+	int tmp = 1;
+	setsockopt(server.getsocket(), SOL_SOCKET, SO_REUSEADDR, (char*)&tmp, sizeof(int));
+
+	assert(server.bind());
+	assert(server.listen());
+
+
+	tcpclient client(8087, "127.0.0.1");
+	assert(client.connect());
+
+	auto rr = server.accept();
+	assert(rr.first);
+	tcpseraccept acc = std::move(rr.second);
+
+
+	binstream p("helloworld");
+	assert(napcom::ret::success == 
+		client.communicate()->sendpackage(p));
+	
+	msleep(100);
+
+	binstream recvpack;
+	assert(napcom::ret::success == 
+		acc.communicate()->recvpackage(recvpack));
+
+	assert(recvpack == "helloworld");
+
+	return true;
+}
+
 
 int main() {
+	net::init();
 
-
-	assert(net_test());
+	//assert(net_test());
 	//assert(binstream_test());
+	assert(netser_test());
 
 	//try {
 	//	Unit unit64("BASE64");
@@ -163,6 +195,7 @@ int main() {
 	//}
 
 	cout << "Test pass";
+	cout.flush();
 #ifndef LINUX
 	auto no_use = _getch();
 #endif

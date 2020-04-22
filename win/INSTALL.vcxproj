@@ -102,12 +102,12 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(ProjectDir)..\output\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\install\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
+      <Command>copy $(ProjectDir)..\output\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\output\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
 </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>mkdir $(ProjectDir)..\install\
-copy $(ProjectDir)..\src\*.h $(ProjectDir)..\install\ /Y</Command>
+      <Command>mkdir $(ProjectDir)..\output\
+copy $(ProjectDir)..\src\*.h $(ProjectDir)..\output\ /Y</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>拷贝头文件</Message>
@@ -125,12 +125,12 @@ copy $(ProjectDir)..\src\*.h $(ProjectDir)..\install\ /Y</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(ProjectDir)..\output\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\install\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
+      <Command>copy $(ProjectDir)..\output\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\output\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
 </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>mkdir $(ProjectDir)..\install\
-copy $(ProjectDir)..\src\*.h $(ProjectDir)..\install\ /Y</Command>
+      <Command>mkdir $(ProjectDir)..\output\
+copy $(ProjectDir)..\src\*.h $(ProjectDir)..\output\ /Y</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>拷贝头文件</Message>
@@ -152,12 +152,12 @@ copy $(ProjectDir)..\src\*.h $(ProjectDir)..\install\ /Y</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(ProjectDir)..\output\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\install\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
+      <Command>copy $(ProjectDir)..\output\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\output\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
 </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>mkdir $(ProjectDir)..\install\
-copy $(ProjectDir)..\src\*.h $(ProjectDir)..\install\ /Y</Command>
+      <Command>mkdir $(ProjectDir)..\output\
+copy $(ProjectDir)..\src\*.h $(ProjectDir)..\output\ /Y</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>拷贝头文件</Message>
@@ -179,12 +179,12 @@ copy $(ProjectDir)..\src\*.h $(ProjectDir)..\install\ /Y</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(ProjectDir)..\output\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\install\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
+      <Command>copy $(ProjectDir)..\output\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\output\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
 </Command>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>mkdir $(ProjectDir)..\install\
-copy $(ProjectDir)..\src\*.h $(ProjectDir)..\install\ /Y</Command>
+      <Command>mkdir $(ProjectDir)..\output\
+copy $(ProjectDir)..\src\*.h $(ProjectDir)..\output\ /Y</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>拷贝头文件</Message>

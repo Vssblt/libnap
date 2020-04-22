@@ -25,9 +25,6 @@ $ make install
 
 
 
-
-
-
 ### Windows  (Visual Studio)
 ------
 ```powershell
@@ -38,13 +35,11 @@ $ ./libnap.sln
 
 **If the compilation is successful, Then the install folder under the project directory will have static link library files  and header files.**
 
-**如果编译成功，则项目目录下的install文件夹将具有静态链接库文件和头文件。**
+**如果编译成功，则项目目录下的output文件夹将具有静态链接库文件和头文件。**
 
 
 
 ## 2.Other content
-
-
 
 ####  In Linux, you can use the following make command to compile according to different needs
 
@@ -68,7 +63,7 @@ make fast : 启用多核快速安静编译
 ##### Windows
 ```
 Visual Studio 2017 / 2019
-Windows SDK Version > 10.0
+Windows SDK Version >= 10.0
 ```
 
 ##### Linux
@@ -76,6 +71,5 @@ Windows SDK Version > 10.0
 G++ Version >= 4.8.5
 Make Version >= 3.8
 ```
-
 
 

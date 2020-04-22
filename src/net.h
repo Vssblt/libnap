@@ -3,8 +3,16 @@
 #include "binstream.h"
 
 _NAP_BEGIN
+class net;
+class napcom;
+class tcpclient;
+class tcpserver;
+class tcpseraccept;
 
 typedef std::pair<socket_t, sockaddr_in> netobject;
+using std::pair;
+using std::make_pair;
+
 
 enum socketType {
 	udp = SOCK_DGRAM,
@@ -91,6 +99,120 @@ public:
 
 	net() = delete;
 	~net() = delete;
+};
+
+
+//基于连接管理器的包发送接受类
+/*
+	构造的同时将接管socket链接
+	销毁napcom同时会关闭socket
+*/
+class napcom {
+public:
+	enum class ret {
+		success,	//成功
+		empty,	    //队列为空
+		mecismsend, //过长的发送数据 单个包只允许发送 64KB
+		ruined,		//被损毁的网络套接字
+	};
+
+	napcom(napcom&&) = delete;
+	napcom(const napcom&) = delete;
+	napcom& operator=(napcom&) = delete;
+
+	ret sendpackage(binstream&);
+	ret recvpackage(binstream&);
+
+	~napcom();
+private:
+	napcom(socket_t&&); //转移其中socket的控制权
+
+	socket_t net;
+
+	//send
+	uint32_t send_seq = 0;
+	std::mutex m_send_quene;
+	std::queue<binstream> send;
+
+	//recv
+	std::mutex m_recv_quene;
+	std::queue<binstream> recv;
+
+	bool state = true;
+	std::thread* thandler;
+
+	void recvhandle();
+
+	friend class tcpclient;
+	friend class tcpseraccept;
+};
+
+//基于tcp的服务器/客户端连接管理器
+
+class tcpserver {
+public:
+	tcpserver(uint16_t port, const char* ip = nullptr);
+	~tcpserver();
+	bool bind();
+	bool listen();
+	std::pair<bool, tcpseraccept> accept();
+
+	tcpserver(tcpserver&&) = delete;
+	tcpserver(const tcpserver&) = delete;
+	tcpserver& operator=(tcpserver&) = delete;
+
+	//getter
+	inline socket_t getsocket() {return ss;}
+	inline sockaddr_in getsockaddr() {return sd;}
+	inline netobject netobj() {return netobject(ss, sd);}
+
+private:
+	struct sockaddr_in sd;
+	socket_t ss;
+};
+
+class tcpseraccept {
+public:
+	
+	uint16_t port() { return net::getPort(sd); }
+	binstream ip() { return net::getsIp(sd); }
+	napcom* communicate() { return easycomm; }
+
+	~tcpseraccept();
+
+	tcpseraccept(tcpseraccept&& old) noexcept;
+	tcpseraccept& operator=(tcpseraccept&) = delete;
+private:
+	tcpseraccept(socket_t, sockaddr_in);
+	tcpseraccept() { /*用于无效的accept返回*/ };
+
+	napcom* easycomm = nullptr;
+	struct sockaddr_in sd = {0};
+
+	friend class tcpserver;
+};
+
+class tcpclient {
+public:
+	tcpclient(uint16_t port, const char* ip);
+	~tcpclient();
+	tcpclient(tcpclient&&) noexcept;
+	tcpclient(const tcpclient&) = delete;
+	tcpclient& operator=(tcpclient&) = delete;
+
+	//连接服务器
+	bool connect();
+
+	//获取自己的napcom
+	inline napcom* communicate() { return easycomm; }
+
+private:
+
+	void initnapcom();
+
+	netobject net;
+	napcom* easycomm  = nullptr;
+
 };
 
 _NAP_END

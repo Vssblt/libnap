@@ -20,14 +20,13 @@
 #include <stdint.h>
 
 
-
 typedef unsigned char byte;
 
 #define _NAP_BEGIN namespace nap{
 #define _NAP_END }
 //#define _NAP ::nap::
 
-//linux sipport
+//linux support
 #ifdef __linux__
 	#define PLATFORM LINUX
 	#define LINUX
@@ -77,7 +76,6 @@ typedef unsigned char byte;
 
 _NAP_BEGIN
 
-//public tool function
 
 //Simple hash function
 uint32_t mhash(const char* str, uint32_t len);
@@ -109,6 +107,9 @@ template<class T>
 inline T min(T a, T b) {
 	return (a < b) ? a : b;
 }
+
+
+void msleep(uint64_t millisecond);
 
 _NAP_END
 
