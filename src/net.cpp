@@ -52,7 +52,7 @@ void net::timeout(socket_t socket, long millisecond){
 
 void net::setclogState(socket_t s, bool block){
 #ifdef LINUX
-	int flags = fcntl(s, F_GETFL, 0);        //»ñÈ¡ÎÄ¼şµÄflagsÖµ¡£
+	int flags = fcntl(s, F_GETFL, 0);        //è·å–æ–‡ä»¶çš„flagså€¼ã€‚
 	if (block)
 		fcntl(s, F_SETFL, flags &~ O_NONBLOCK);//block
 	else
@@ -92,7 +92,7 @@ uint32_t net::getnIp(sockaddr_in& object){
 int32_t net::close(socket_t socket){
 
 #ifdef LINUX
-	//linuxĞèÒªshutdown²ÅÄÜÊ¹recv·µ»Ø
+	//linuxéœ€è¦shutdownæ‰èƒ½ä½¿recvè¿”å›
 	shutdown(socket, SHUT_RDWR); 
 	int32_t r =  ::close(socket);
 #endif
@@ -161,28 +161,21 @@ int net::recv(socket_t dest, char* buf, int size) {
 //------------------------------------------------------------- napcpm
 
 napcom::~napcom() {
-	net::close(net);
+	net::close(net); // ï¼Ÿï¼Ÿï¼Ÿ
 	state = false;
-	if (thandler->joinable())
-		thandler->join();
-	//thandler->detach();
-	/*
-		detach¿ÉÒÔ·ÀÖ¹³ÌĞò¿¨ÔÚRAII×ÊÔ´Ïú»ÙµÄÄ©Î²
-		µ«ÊÇ»áÊ¹Òş²ØµÄbug²»±»·¢ÏÖ£¬µ¼ÖÂÏß³ÌÎ´½áÊøÊ±
-		thisÖ¸ÕëÒÑ¾­Ê§Ğ§£¬Ôì³É´íÎóÄÚ´æ·ÃÎÊ£¬»òÏß³Ì
-		×ÊÔ´ÀË·Ñµ¼ÖÂÄÚ´æĞ¹Â©
-	*/
-	delete thandler;
+
 }
 
 napcom::napcom(socket_t&& n) {
+	//è½¬ç§»socket
 	net = n;
 	n = 0;
 	state = true;
-	thandler = new std::thread(&napcom::recvhandle, this);
 }
 
 napcom::ret napcom::sendpackage(binstream& package){
+	std::lock_guard<std::mutex> s(mu_send_channel);
+
 	if (state == false)
 		return ret::ruined;
 	uint32_t package_size = (uint32_t)package.size();
@@ -196,60 +189,52 @@ napcom::ret napcom::sendpackage(binstream& package){
 	bool r = net::sendInsist(
 		net, (char*)&length, 4);
 	if (!r) {
-		//ÍøÂçÁ¬½ÓÒì³£
+		//ç½‘ç»œè¿æ¥å¼‚å¸¸
 		state = false;
 		return ret::ruined;
 	}
 	r = net::sendInsist(
 		net, (char*)package.str(), package_size);
 	if (!r) {
-		//ÍøÂçÁ¬½ÓÒì³£
+		//ç½‘ç»œè¿æ¥å¼‚å¸¸
 		state = false;
 		return ret::ruined;
 	}
 	return ret::success;
 }
 
-napcom::ret napcom::recvpackage(binstream& retv){
-	std::lock_guard<std::mutex> lockGuard(m_recv_quene);
-	if (recv.empty())
-		return ret::empty;
-	retv = std::move(recv.front());
-	recv.pop();
+napcom::ret napcom::recvpackage(binstream& recvp){
+	if (state == false)
+		return ret::ruined;
+
+	std::lock_guard<std::mutex> s(mu_recv_channel);
+	uint32_t head;
+	bool r = net::recvInsist(net, (char*)&head, 4);
+	if (!r) {
+		//ç½‘ç»œè¿æ¥å¼‚å¸¸ï¼Œæˆ–socketèµ„æºå·²å…³é—­
+		state = false;
+		return ret::ruined;
+	}
+	uint16_t h;
+	uint16_t l;
+	h = head >> 16;
+	l = head & 0x0000ffff;
+	if (h != l) {
+		state = false;
+		return ret::ruined;
+	}
+	binstream data;
+	data.resize(h);
+	r = net::recvInsist(net, (char*)data.str(), h);
+	if (!r) {
+		//ç½‘ç»œè¿æ¥å¼‚å¸¸ï¼Œæˆ–socketèµ„æºå·²å…³é—­
+		state = false;
+		return ret::ruined;
+	}
+	recvp.swap(data);
 	return ret::success;
 }
 
-void napcom::recvhandle(){
-	while (state) {
-		uint32_t head;
-		bool r = net::recvInsist(net, (char*)&head, 4);
-		if (!r) {
-			//ÍøÂçÁ¬½ÓÒì³££¬»òsocket×ÊÔ´ÒÑ¹Ø±Õ
-			state = false;
-			break;
-		}
-		uint16_t h;
-		uint16_t l;
-		h = head >> 16;
-		l = head & 0x0000ffff;
-		if (h != l) {
-			state = false;
-			break;
-		}
-		binstream data;
-		data.resize(h);
-		r = net::recvInsist(net, (char*)data.str(), h);
-		if (!r) {
-			//ÍøÂçÁ¬½ÓÒì³££¬»òsocket×ÊÔ´ÒÑ¹Ø±Õ
-			state = false;
-			break;
-		}
-		{
-			std::lock_guard<std::mutex> lockGuard(m_recv_quene);
-			recv.push(std::move(data));
-		}
-	}
-}
 
 //------------------------------------------------------------- tcpclient
 

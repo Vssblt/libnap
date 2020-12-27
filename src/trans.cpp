@@ -2,7 +2,7 @@
 _NAP_BEGIN
 
 ///////----------------hex
-//¶ş½øÖÆ×ªÎª¿É¶ÁÊ®Áù½øÖÆ
+//äºŒè¿›åˆ¶è½¬ä¸ºå¯è¯»åå…­è¿›åˆ¶
 #define HEX_TRANS(x,up) (((x)>0x09)?((x)+((up)?0x37:0x57)):((x)|0x30))
 #define STR_TRANS(x) (((x)<0x40)?((x)-0x30):(((x)<0x47)?((x)-0x37):(((x)<0x67)?((x)-0x57):0x10)))
 
@@ -59,7 +59,7 @@ void Hex::to_bin(const void* m, size_t len){
 	for (size_t i = 0; i < length; i++) {
 		buffer[i] = (STR_TRANS(_m[i * 2]))<< 4;
 		if (!odd || (i*2ll+1<len))
-			buffer[i] += STR_TRANS(_m[i * 2 + 1]); //»¹Ã»×öÅ¼Êı´Î
+			buffer[i] += STR_TRANS(_m[i * 2 + 1]); //è¿˜æ²¡åšå¶æ•°æ¬¡
 	}
 
 }
@@ -120,12 +120,12 @@ binstream Base64::encode(binstream& mem, bool safe){
 	size_t length = (mem.size() / 3 + ((mem.size() % 3 == 0) ? 0 : 1)) * 4;
 	ret.resize(length);
 
-	//´¦ÀíÕû×Ö½Ú
+	//å¤„ç†æ•´å­—èŠ‚
 	for (size_t i = 0; i < mem.size() / 3; i++) {
 		enblock(mem.str() + (i * 3ll), ret.str() + (i * 4ll),base64_table);
 	}
 
-	//È·¶¨Ìî³ä²¿·Ö
+	//ç¡®å®šå¡«å……éƒ¨åˆ†
 	if (mem.size() % 3 != 0) {
 		uint8_t* b64_str = ret.end() - 4;
 		uint8_t* str_str = mem.end() - (mem.size() % 3);
@@ -143,7 +143,7 @@ binstream Base64::encode(binstream& mem, bool safe){
 			enblock(temp, b64_str, base64_table);
 			break;
 		}
-		*(ret.end() - 1) = '='; //×îºóÒ»Î»Ò»¶¨ÊÇ = 
+		*(ret.end() - 1) = '='; //æœ€åä¸€ä½ä¸€å®šæ˜¯ = 
 	}
 
 	return ret;
@@ -161,27 +161,27 @@ binstream Base64::decode(binstream& base, bool safe){
 	size_t length = base.size() / 4 * 3;
 	ret.resize(length);
 
-	//´¦Àí´¦×îºóÒ»¿éÒÔÍâµÄÆäËû¿ì
+	//å¤„ç†å¤„æœ€åä¸€å—ä»¥å¤–çš„å…¶ä»–å¿«
 	for (size_t i = 0; i < (base.size() / 4 - 1); i++) {
 		deblock(ret.str()+(i*3ll), base.str()+(i*4ll),(char*)det);
 	}
 
-	//´¦Àí×îºóÒ»¿é
-	if (*(base.end() - 1) == '=') { //ÊÇÌî³ä¿é
+	//å¤„ç†æœ€åä¸€å—
+	if (*(base.end() - 1) == '=') { //æ˜¯å¡«å……å—
 		uint8_t* baseend = base.end();
 		if (*(baseend - 2) == '=') {
-			//Ìî³äÁËÁ½¸ö8bit×Ö·û
+			//å¡«å……äº†ä¸¤ä¸ª8bitå­—ç¬¦
 			ret.resize(ret.size() - 2);
 			// 110 1110
 			*(ret.end() - 1) = (det[baseend[-4]]<<2) | (det[baseend[-3]]>>4);
 		}else {
-			//Ìî³äÁËÒ»¸ö8bit×Ö·û
+			//å¡«å……äº†ä¸€ä¸ª8bitå­—ç¬¦
 			ret.resize(ret.size() - 1);
 			*(ret.end() - 2) = det[baseend[-4]] << 2 | det[baseend[-3]] >> 4;
 			*(ret.end() - 1) = det[baseend[-3]] << 4 | det[baseend[-2]] >> 2;
 		}
 	}else {
-		//²»ÊÇÌî³ä
+		//ä¸æ˜¯å¡«å……
 		deblock(ret.end()-3, base.end()-4, (char*)det);
 	}
 	return ret;

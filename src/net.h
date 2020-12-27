@@ -54,14 +54,14 @@ public:
 	//create legal and nitialization socket handle
 	static socket_t socket(socketType type);
 
-	//ÌáÈ¡½á¹¹Ìåsockaddr_inÖĞµÄ¶Ë¿ÚĞÅÏ¢
-	//addr Òª»ñÈ¡ĞÅÏ¢µÄsockaddr_in
+	//æå–ç»“æ„ä½“sockaddr_inä¸­çš„ç«¯å£ä¿¡æ¯
+	//addr è¦è·å–ä¿¡æ¯çš„sockaddr_in
 	static unsigned short getPort(sockaddr_in addr);
 
 	//set socket timeout
 	static void timeout(socket_t socket, long  millisecond);
 
-	//ÉèÖÃÊÇ·ñ×èÈû
+	//è®¾ç½®æ˜¯å¦é˜»å¡
 	static void setclogState(socket_t s,bool block = true);
 
 	////ip transfer
@@ -78,21 +78,21 @@ public:
 	//get last error
 	static int lastError();
 
-	//Ç¿ÖÆµÈ´ı»ñÈ¡Ö¸¶¨³¤¶È×Ö·û´®
+	//å¼ºåˆ¶ç­‰å¾…è·å–æŒ‡å®šé•¿åº¦å­—ç¬¦ä¸²
 	static bool recvInsist(
 		socket_t sock, 
 		char* buf, 
 		int size
 	);
 
-	//Ç¿ÖÆµÈ´ı·¢ËÍÖ¸¶¨³¤¶È×Ö·û´®
+	//å¼ºåˆ¶ç­‰å¾…å‘é€æŒ‡å®šé•¿åº¦å­—ç¬¦ä¸²
 	static bool sendInsist(
 		socket_t sock, 
 		const char* buf, 
 		int size
 	);
 
-	//·¢ËÍÊı¾İ°ü µ×²ãº¯Êı
+	//å‘é€æ•°æ®åŒ… åº•å±‚å‡½æ•°
 	static int send(socket_t dest, const char* buf, int size);
 	static int send(socket_t dest, const char* buf);
 	static int recv(socket_t dest, char* buf, int size);
@@ -102,18 +102,17 @@ public:
 };
 
 
-//»ùÓÚÁ¬½Ó¹ÜÀíÆ÷µÄ°ü·¢ËÍ½ÓÊÜÀà
+//åŸºäºè¿æ¥ç®¡ç†å™¨çš„åŒ…å‘é€æ¥å—ç±»
 /*
-	¹¹ÔìµÄÍ¬Ê±½«½Ó¹ÜsocketÁ´½Ó
-	Ïú»ÙnapcomÍ¬Ê±»á¹Ø±Õsocket
+	æ„é€ çš„åŒæ—¶å°†æ¥ç®¡socketé“¾æ¥
+	é”€æ¯napcomåŒæ—¶ä¼šå…³é—­socket
 */
 class napcom {
 public:
 	enum class ret {
-		success,	//³É¹¦
-		empty,	    //¶ÓÁĞÎª¿Õ
-		mecismsend, //¹ı³¤µÄ·¢ËÍÊı¾İ µ¥¸ö°üÖ»ÔÊĞí·¢ËÍ 64KB
-		ruined,		//±»Ëğ»ÙµÄÍøÂçÌ×½Ó×Ö
+		success,	//æˆåŠŸ
+		mecismsend, //è¿‡é•¿çš„å‘é€æ•°æ® å•ä¸ªåŒ…åªå…è®¸å‘é€ 64KB
+		ruined,		//è¢«æŸæ¯çš„ç½‘ç»œå¥—æ¥å­—(åè®®å¼‚å¸¸æˆ–ç½‘ç»œæ–­å¼€)
 	};
 
 	napcom(napcom&&) = delete;
@@ -125,29 +124,18 @@ public:
 
 	~napcom();
 private:
-	napcom(socket_t&&); //×ªÒÆÆäÖĞsocketµÄ¿ØÖÆÈ¨
-
+	napcom(socket_t&&); //è½¬ç§»å…¶ä¸­socketçš„æ§åˆ¶æƒ
 	socket_t net;
 
-	//send
-	uint32_t send_seq = 0;
-	std::mutex m_send_quene;
-	std::queue<binstream> send;
-
-	//recv
-	std::mutex m_recv_quene;
-	std::queue<binstream> recv;
-
-	bool state = true;
-	std::thread* thandler;
-
-	void recvhandle();
+	bool state = true; //æ ‡è¯†socketçš„çŠ¶æ€å’Œåè®®çŠ¶æ€
+	std::mutex mu_send_channel;
+	std::mutex mu_recv_channel;
 
 	friend class tcpclient;
 	friend class tcpseraccept;
-};
+}; 
 
-//»ùÓÚtcpµÄ·şÎñÆ÷/¿Í»§¶ËÁ¬½Ó¹ÜÀíÆ÷
+//åŸºäºtcpçš„æœåŠ¡å™¨/å®¢æˆ·ç«¯è¿æ¥ç®¡ç†å™¨
 
 class tcpserver {
 public:
@@ -184,10 +172,10 @@ public:
 	tcpseraccept& operator=(tcpseraccept&) = delete;
 private:
 	tcpseraccept(socket_t, sockaddr_in);
-	tcpseraccept() { /*ÓÃÓÚÎŞĞ§µÄaccept·µ»Ø*/ };
+	tcpseraccept() { /*ç”¨äºæ— æ•ˆçš„acceptè¿”å›*/ };
 
 	napcom* easycomm = nullptr;
-	struct sockaddr_in sd = {0,0,0,0};
+	struct sockaddr_in sd;
 
 	friend class tcpserver;
 };
@@ -200,10 +188,10 @@ public:
 	tcpclient(const tcpclient&) = delete;
 	tcpclient& operator=(tcpclient&) = delete;
 
-	//Á¬½Ó·şÎñÆ÷
+	//è¿æ¥æœåŠ¡å™¨
 	bool connect();
 
-	//»ñÈ¡×Ô¼ºµÄnapcom
+	//è·å–è‡ªå·±çš„napcom
 	inline napcom* communicate() { return easycomm; }
 
 private:

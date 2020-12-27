@@ -1,10 +1,37 @@
 #include "binstream.h"
 _NAP_BEGIN
 
-binstream::~binstream(){
-	if (content)
-		delete[] content;
-	content = nullptr;
+
+//uint32_t binstream::hash() {
+//	if (content == nullptr) return 0;
+//	uint8_t* str = content;
+//	uint32_t hash = 0;
+//	uint32_t x = 0;
+//	uint32_t i = 0;
+//	for (i = 0; i < length; str++, i++) {
+//		hash = (hash << 4) + (*str);
+//		if ((x = hash & 0xF0000000L) != 0) {
+//			hash ^= (x >> 24);
+//		}
+//		hash &= ~x;
+//	}
+//	return hash;
+//}
+
+
+void binstream::swap(binstream& b){
+
+	uint8_t* temp_content = this->content;
+	size_t temp_capacity = this->capacity;
+	size_t temp_length = this->length;
+
+	this->content = b.content;
+	this->capacity = b.capacity;
+	this->length = b.length;
+
+	b.content = temp_content;
+	b.capacity = temp_capacity;
+	b.length = temp_length;
 }
 
 binstream binstream::shift(char** buffer, size_t len) {
@@ -33,7 +60,7 @@ binstream::binstream(const binstream& old) noexcept {
 	_append(old.content, old.length);
 }
 
-//ÒÆ¶¯¹¹Ôìº¯Êı
+//ç§»åŠ¨æ„é€ å‡½æ•°
 binstream::binstream(binstream&& old) noexcept {
 	content = old.content;
 	length = old.length;
@@ -143,6 +170,13 @@ std::string binstream::toStdString(){
 	return std::move(ret);
 }
 
+
+binstream::~binstream(){
+	if (content)
+		delete[] content;
+	content = nullptr;
+}
+
 void binstream::_append(const uint8_t* con, size_t _length){
 	if (_length <= 0 || con == nullptr) return;
 
@@ -152,7 +186,7 @@ void binstream::_append(const uint8_t* con, size_t _length){
 		countlength = (countlength < 15) ? 15 : countlength;
 		uint8_t* temp_con = new uint8_t[countlength];
 
-		if (length > 0)//·ÀÖ¹Ö®Ç°ÊÇ¿Õ´®
+		if (length > 0)//é˜²æ­¢ä¹‹å‰æ˜¯ç©ºä¸²
 			memcpy(temp_con, content, static_cast<size_t>(length));
 
 		memcpy(
@@ -181,23 +215,32 @@ void binstream::_set(const uint8_t* con, size_t _length){
 		_recap(_length);
 	}
 	length = _length;
+	assert(content != 0);
 	memcpy(content, con, _length);
 }
 
 void binstream::_recap(size_t _cap){
-	assert(_cap != 0);//È·±£Òª·ÖÅäµÄ¿Õ¼ä´óÓÚ0
-
-	if (_cap < 15ll)
-		_cap = 15ll;
-
-	if (content != nullptr) {
-		delete[] content;
-		content = nullptr;
+	if (_cap == 0) {
+		capacity = 0;
+		length = 0;
+		if (content != nullptr) {
+			delete[] content;
+			content = nullptr;
+		}
 	}
+	else {
+		if (_cap < 15ll)
+			_cap = 15ll;
 
-	length = 0;
-	capacity = _cap;
-	content = new uint8_t[_cap];
+		if (content != nullptr) {
+			delete[] content;
+			content = nullptr;
+		}
+
+		length = 0;
+		capacity = _cap;
+		content = new uint8_t[_cap];
+	}
 }
 
 void binstream::_recap_hold(size_t _cap){

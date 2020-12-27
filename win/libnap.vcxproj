@@ -71,23 +71,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>../src/;E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>../src/;E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>../src/;E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>../src/;E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\;$(IncludePath)</IncludePath>
-    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -161,6 +161,7 @@
     <ClInclude Include="..\src\aes.h" />
     <ClInclude Include="..\src\binstream.h" />
     <ClInclude Include="..\src\hash.h" />
+    <ClInclude Include="..\src\json.h" />
     <ClInclude Include="..\src\libnap.h" />
     <ClInclude Include="..\src\nap_common.h" />
     <ClInclude Include="..\src\net.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="..\src\aes.cpp" />
     <ClCompile Include="..\src\binstream.cpp" />
     <ClCompile Include="..\src\hash.cpp" />
+    <ClCompile Include="..\src\json.cpp" />
     <ClCompile Include="..\src\nap_common.cpp" />
     <ClCompile Include="..\src\net.cpp" />
     <ClCompile Include="..\src\trans.cpp" />

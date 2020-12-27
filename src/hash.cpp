@@ -72,7 +72,7 @@ binstream SHA256::calculator(){
 	);
 
 	if (sha256_buffer_len >= 56) {
-		//ĞèÒª¶îÍâ»º³åÇø,ÏÈ°Ñµ±Ç°»º³åÇø´¦Àíµô
+		//éœ€è¦é¢å¤–ç¼“å†²åŒº,å…ˆæŠŠå½“å‰ç¼“å†²åŒºå¤„ç†æ‰
 		uint32_t fill = 64 - sha256_buffer_len;
 		calSHA256();
 		calByte -= fill;
@@ -80,13 +80,13 @@ binstream SHA256::calculator(){
 		memset(sha256_buffer, 0, 64);
 	}
 
-	//²»ĞèÒª¶îÍâ»º³åÇø
+	//ä¸éœ€è¦é¢å¤–ç¼“å†²åŒº
 	uint64_t len = (calByte + sha256_buffer_len) * 8ULL;
 	len = SWAP64(len);
 	memcpy(sha256_buffer + 56, &len, 8);
 	calSHA256();
 	for (int i = 0; i < 8; i++) {
-		//¸Ä±ä×Ö½ÚĞò£¬ÒÔ±ãÖ±½Óµ±³É×Ö·û´®¶Á³ö
+		//æ”¹å˜å­—èŠ‚åºï¼Œä»¥ä¾¿ç›´æ¥å½“æˆå­—ç¬¦ä¸²è¯»å‡º
 		sha256[i] = SWAP32(sha256[i]);
 	}
 	return 
@@ -95,9 +95,9 @@ binstream SHA256::calculator(){
 		); //length of 32Byte
 }
 
-void SHA256::add(const char* data, uint32_t len){
-		//¼ÆËãÔö¼Ó½øÀ´µÄsha256Öµ
-		//Èç¹û¶àÓà64¾ÍÏÈ»º´æÆğÀ´
+void SHA256::add(const char* data, size_t len){
+		//è®¡ç®—å¢åŠ è¿›æ¥çš„sha256å€¼
+		//å¦‚æœå¤šä½™64å°±å…ˆç¼“å­˜èµ·æ¥
 	while (len > 0) {
 		uint32_t need = 64 - sha256_buffer_len;
 		if (len >= need) {
@@ -137,7 +137,7 @@ void SHA256::calSHA256(){
 	uint32_t g = sha256[6];
 	uint32_t h = sha256[7];
 
-	//round ´Ë´¦ĞèÒªÓÅ»¯£¬±ÜÃâ´óÁ¿¸³Öµ ²Î¿¼bitcoin
+	//round æ­¤å¤„éœ€è¦ä¼˜åŒ–ï¼Œé¿å…å¤§é‡èµ‹å€¼ å‚è€ƒbitcoin
 	for (int i = 0; i < 64; i++) {
 
 		uint32_t t1 = h + SHA256_USI1(e)

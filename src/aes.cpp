@@ -96,7 +96,7 @@ binstream Aes::encode(const char* plaintext, int len){
 		assert(false);
 	};
 
-	//·Ö×é²¢¼ÓÃÜ
+	//åˆ†ç»„å¹¶åŠ å¯†
 	uint8_t matrix4x4[16];
 	if (type == AesType::ECB) {
 
@@ -135,7 +135,7 @@ bool Aes::decode(const char* ciphertext, int len, binstream& b) {
 	
 	memcpy(buffer, ciphertext, len);
 	
-	//·Ö×é²¢½âÃÜ
+	//åˆ†ç»„å¹¶è§£å¯†
 	uint8_t matrix4x4[16];
 	if (type == AesType::ECB) {
 		
@@ -172,7 +172,7 @@ bool Aes::decode(const char* ciphertext, int len, binstream& b) {
 		assert(false);
 	}
 
-	//¸ù¾İÌî³äÈ¥³ıÌî³ä
+	//æ ¹æ®å¡«å……å»é™¤å¡«å……
 	int real_length = len;
 	switch (this->padd) {
 	case AesPadding::PKCS5:
@@ -180,7 +180,7 @@ bool Aes::decode(const char* ciphertext, int len, binstream& b) {
 	case AesPadding::ISO10126:
 		real_length -= buffer[len - 1];
 	case AesPadding::Zeros:
-		//0Ìî³äÎŞ·¨È·¶¨ÊıÁ¿£¬ÎŞ·¨È¥³ı
+		//0å¡«å……æ— æ³•ç¡®å®šæ•°é‡ï¼Œæ— æ³•å»é™¤
 		break;
 	default:
 		//not support padding mode
@@ -188,7 +188,7 @@ bool Aes::decode(const char* ciphertext, int len, binstream& b) {
 	};
 
 	if (buffer[len - 1] > 16) {
-		//½âÃÜÊ§°Ü£¬ÒòÎªÌî³ä×î´ó16×Ö½Ú
+		//è§£å¯†å¤±è´¥ï¼Œå› ä¸ºå¡«å……æœ€å¤§16å­—èŠ‚
 		delete[] buffer;
 		return false;
 	}
@@ -209,14 +209,14 @@ void Aes::_16encode(Matrix4x4 matrix4x4){
 	addroundkey(matrix4x4, rk);
 	for (int j = 1; j < 10; ++j) {
 		rk += 4;
-		subbytes(matrix4x4);   // ×Ö½ÚÌæ»»
-		shiftrows(matrix4x4);  // ĞĞÒÆÎ»
-		mixcolumns(matrix4x4); // ÁĞ»ìºÏ
-		addroundkey(matrix4x4, rk); // ÂÖÃØÔ¿¼Ó
+		subbytes(matrix4x4);   // å­—èŠ‚æ›¿æ¢
+		shiftrows(matrix4x4);  // è¡Œç§»ä½
+		mixcolumns(matrix4x4); // åˆ—æ··åˆ
+		addroundkey(matrix4x4, rk); // è½®ç§˜é’¥åŠ 
 	}
-	subbytes(matrix4x4);    // ×Ö½ÚÌæ»»
-	shiftrows(matrix4x4);  // ĞĞÒÆÎ»
-	// ´Ë´¦²»½øĞĞÁĞ»ìºÏ
+	subbytes(matrix4x4);    // å­—èŠ‚æ›¿æ¢
+	shiftrows(matrix4x4);  // è¡Œç§»ä½
+	// æ­¤å¤„ä¸è¿›è¡Œåˆ—æ··åˆ
 	addroundkey(matrix4x4, rk + 4);
 }
 void Aes::_16decode(Matrix4x4 matrix4x4){
@@ -224,19 +224,19 @@ void Aes::_16decode(Matrix4x4 matrix4x4){
 	addroundkey(matrix4x4, rk);
 	for (int j = 1; j < 10; ++j) {
 		rk += 4;
-		invshiftrows(matrix4x4);  // ĞĞÒÆÎ»
-		invsubbytes(matrix4x4);   // ×Ö½ÚÌæ»»
-		addroundkey(matrix4x4, rk); // ÂÖÃØÔ¿¼Ó
-		invmixcolumns(matrix4x4); // ÁĞ»ìºÏ
+		invshiftrows(matrix4x4);  // è¡Œç§»ä½
+		invsubbytes(matrix4x4);   // å­—èŠ‚æ›¿æ¢
+		addroundkey(matrix4x4, rk); // è½®ç§˜é’¥åŠ 
+		invmixcolumns(matrix4x4); // åˆ—æ··åˆ
 	}
-	invsubbytes(matrix4x4);    // ×Ö½ÚÌæ»»
-	invshiftrows(matrix4x4);  // ĞĞÒÆÎ»
-	// ´Ë´¦²»½øĞĞÁĞ»ìºÏ
+	invsubbytes(matrix4x4);    // å­—èŠ‚æ›¿æ¢
+	invshiftrows(matrix4x4);  // è¡Œç§»ä½
+	// æ­¤å¤„ä¸è¿›è¡Œåˆ—æ··åˆ
 	addroundkey(matrix4x4, rk + 4);
 }
 
 void Aes::char2matrix4x4(Matrix4x4 out,const uint8_t* in){
-	assert(out != in); //ÊäÈëÊä³ö²»ÔÊĞíÊ¹ÓÃÍ³Í¬Ò»¿Õ¼ä
+	assert(out != in); //è¾“å…¥è¾“å‡ºä¸å…è®¸ä½¿ç”¨ç»ŸåŒä¸€ç©ºé—´
 	for (int i = 0; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j) {
 			*(out + j*4+i) = *in;
@@ -245,7 +245,7 @@ void Aes::char2matrix4x4(Matrix4x4 out,const uint8_t* in){
 	}
 }
 void Aes::matrix4x42char(uint8_t* out,const Matrix4x4 in){
-	assert(out != in);//ÊäÈëÊä³ö²»ÔÊĞíÊ¹ÓÃÍ³Í¬Ò»¿Õ¼ä
+	assert(out != in);//è¾“å…¥è¾“å‡ºä¸å…è®¸ä½¿ç”¨ç»ŸåŒä¸€ç©ºé—´
 	for (int i = 0; i < 4; ++i) {
 		for (int j = 0; j < 4; ++j) {
 			*out = *(in + j * 4 + i);
@@ -254,7 +254,7 @@ void Aes::matrix4x42char(uint8_t* out,const Matrix4x4 in){
 	}
 }
 
-//Éú³É44¸ö4byteÃÜÔ¿    (10+1) x (4 x 4)
+//ç”Ÿæˆ44ä¸ª4byteå¯†é’¥    (10+1) x (4 x 4)
 void Aes::keyexpan(uint8_t* key){
 	//copy keysw[0 - 3]
 	for (int i = 0; i < 4; i++) {
@@ -262,7 +262,7 @@ void Aes::keyexpan(uint8_t* key){
 		keyse[i] = INT32(key[t + 0], key[t + 1], key[t + 2], key[t + 3]);
 	}
 
-	//Ñ­»·×óÒÆÒ»Î»È»ºó×Ö½ÚÌæ»»
+	//å¾ªç¯å·¦ç§»ä¸€ä½ç„¶åå­—èŠ‚æ›¿æ¢
 	auto mix = [](uint32_t n)-> uint32_t {
 		uint32_t ret=0,_ret;
 		uint8_t temp = (n & 0xff000000) >> 24;
@@ -290,8 +290,8 @@ void Aes::keyexpan(uint8_t* key){
 		w += 4;
 	}
 
-	//¼ÆËã½âÃÜÃÜÔ¿
-	//¼´d[0-3]=e[41-44], d[4-7]=e[37-40]... d[41-44]=e[0-3]
+	//è®¡ç®—è§£å¯†å¯†é’¥
+	//å³d[0-3]=e[41-44], d[4-7]=e[37-40]... d[41-44]=e[0-3]
 	uint32_t* v = keysd;
 	w = keyse + 44 - 4;
 	for (int j = 0; j < 11; j++) {
@@ -305,7 +305,7 @@ void Aes::keyexpan(uint8_t* key){
 }
 
 //1
-void Aes::subbytes(uint8_t* matrix4x4){//Í¨¹ıS-BOX ½øĞĞ·ÇÏßĞÔÌæ´ú
+void Aes::subbytes(uint8_t* matrix4x4){//é€šè¿‡S-BOX è¿›è¡Œéçº¿æ€§æ›¿ä»£
 	for (int i = 0; i < 16; i++)
 		matrix4x4[i] =
 			aes_s_box[matrix4x4[i]];
@@ -365,7 +365,7 @@ void Aes::invshiftrows(uint8_t* matrix4x4) {
 }
 
 //3
-uint8_t Aes::g_num(uint8_t u, uint8_t v) {//Á½×Ö½ÚµÄÙ¤ÂŞ»ªÓò³Ë·¨ÔËËã
+uint8_t Aes::g_num(uint8_t u, uint8_t v) {//ä¸¤å­—èŠ‚çš„ä¼½ç½—ååŸŸä¹˜æ³•è¿ç®—
 	uint8_t p = 0;
 	for (int i = 0; i < 8; i++) {
 		if (u & 0x01) {   
@@ -385,7 +385,7 @@ void Aes::mixcolumns(uint8_t* matrix4x4){
 		*((uint8_t*)tmp+i) = matrix4x4[i];
 
 	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {//Ù¤ÂŞ»ªÓò¼Ó·¨ºÍ³Ë·¨
+		for (int j = 0; j < 4; j++) {//ä¼½ç½—ååŸŸåŠ æ³•å’Œä¹˜æ³•
 			*(matrix4x4 + 4 * i + j) =
 				g_num(aes_3mt[i][0], tmp[0][j])
 				^ g_num(aes_3mt[i][1], tmp[1][j])
@@ -400,7 +400,7 @@ void Aes::invmixcolumns(uint8_t* matrix4x4){
 		*((uint8_t*)tmp + i) = matrix4x4[i];
 
 	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {//Ù¤ÂŞ»ªÓò¼Ó·¨ºÍ³Ë·¨
+		for (int j = 0; j < 4; j++) {//ä¼½ç½—ååŸŸåŠ æ³•å’Œä¹˜æ³•
 			*(matrix4x4 + 4 * i + j) =
 				g_num(aes_inv_3mt[i][0], tmp[0][j])
 				^ g_num(aes_inv_3mt[i][1], tmp[1][j])

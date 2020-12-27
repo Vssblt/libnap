@@ -4,7 +4,7 @@
 
 _NAP_BEGIN
 
-////×Ö·û´®²Ù×÷
+////å­—ç¬¦ä¸²æ“ä½œ
 //	binstream substr(int pos, int length);
 
 ////foreach support
@@ -14,24 +14,31 @@ _NAP_BEGIN
 class binstream {
 public:
 
-//#pragma region binstream transfer
+	//uint32_t hash(); ä»¥åæœ‰ç©ºå†æµ‹è¯•
+
+	
+	
+	void swap(binstream& b);//äº¤æ¢ä¸¤ä¸ªå­—ç¬¦ä¸²
+	static binstream shift(char** buffer, size_t len); //å°†å­—ç¬¦ä¸²è½¬ç§»åˆ°binstream
 
 	template <class T>
-	static binstream from(T n);
+	T to();
 
-//#pragma endregion
+
+	template <class T>
+	static binstream from(const T num); //è½¬å­—ç¬¦ä¸²
+
 
 //#pragma region binstream construct
-	static binstream shift(char** buffer, size_t len);
-
+	
 	binstream() {};
 	binstream(const void* c, size_t len)noexcept;
 	binstream(const char* c)noexcept;
 	binstream(const std::string& str)noexcept;
-	binstream(size_t len)noexcept {_recap(len);}
-	explicit binstream(const binstream& old) noexcept;
-
+	binstream(size_t len)noexcept { _recap(len); }
+	binstream(const binstream& old) noexcept;
 	binstream(binstream&& old) noexcept;
+
 //#pragma endregion
 
 //#pragma region binstream operate
@@ -48,8 +55,9 @@ public:
 //#pragma region binstream operate
 
 	void operator+=(const binstream& o) {append(o);}
-	void operator+=(const char* o) {append(o,strlen(o));}
-	void operator+=(const std::string& o) {append(o);}
+	void operator+=(const char* o) { append(o, strlen(o)); }
+	void operator+=(const std::string& o) { append(o); }
+	void operator+=(const char c) {append(&c,1);}
 
 //#pragma endregion +=
 
@@ -76,23 +84,23 @@ public:
 
 //#pragma region binstream setter
 
-	//Ìî³äÖ¸¶¨³¤¶È×Ö·û£¬»áÉ¾³ıÒÔÇ°×Ö·û´®ÄÚÈİ
+	//å¡«å……æŒ‡å®šé•¿åº¦å­—ç¬¦ï¼Œä¼šåˆ é™¤ä»¥å‰å­—ç¬¦ä¸²å†…å®¹
 	void fill(uint8_t c, size_t len);
 
-	//Ô¤ÁôÖ¸¶¨³¤¶È¿Õ¼ä£¬»áÉ¾³ıÒÔÇ°×Ö·û´®ÄÚÈİ
-	//Ö´ĞĞÍêºólengthÎª0£¬capacity´óÓÚµÈÓÚ²ÎÊılen
+	//é¢„ç•™æŒ‡å®šé•¿åº¦ç©ºé—´ï¼Œä¼šåˆ é™¤ä»¥å‰å­—ç¬¦ä¸²å†…å®¹
+	//æ‰§è¡Œå®Œålengthä¸º0ï¼Œcapacityå¤§äºç­‰äºå‚æ•°len
 	void reserve(size_t len);
 
-	//¸ü¸Ä¿Õ¼ä³¤¶È£¬lenÈç¹ûĞ¡ÓÚµ±Ç°×Ö·û´®³¤¶È»á½Ø¶Ï
-	//Ö´ĞĞÍêºólengthÎªlen£¬capacity´óÓÚµÈÓÚ²ÎÊılen
+	//æ›´æ”¹ç©ºé—´é•¿åº¦ï¼Œlenå¦‚æœå°äºå½“å‰å­—ç¬¦ä¸²é•¿åº¦ä¼šæˆªæ–­
+	//æ‰§è¡Œå®Œålengthä¸ºlenï¼Œcapacityå¤§äºç­‰äºå‚æ•°len
 	void resize(size_t len);
 
-	//×·¼Ó×Ö·û
+	//è¿½åŠ å­—ç¬¦
 	void append(const void* c, size_t len);
 	void append(const std::string& str);
 	void append(const binstream& str);
 
-	//½«³¤¶ÈÉèÖÃÎª0
+	//å°†é•¿åº¦è®¾ç½®ä¸º0
 	void clean() noexcept {length = 0;}
 
 //#pragma endregion
@@ -102,29 +110,30 @@ public:
 	inline size_t size() const { return length; }
 	inline size_t cap() const { return capacity; }
 
-	//»ñÈ¡Ö¸¶¨Î»ÖÃ×Ö·û£¬Ô½½çÅ×³öÒì³£
+	//è·å–æŒ‡å®šä½ç½®å­—ç¬¦ï¼Œè¶Šç•ŒæŠ›å‡ºå¼‚å¸¸
 	uint8_t at(size_t pos);
 
-	//»ñÈ¡Ö¸¶¨Î»ÖÃ×Ö·û£¬²»½øĞĞÔ½½ç¼ì²é
-	inline uint8_t& operator[](size_t pos) noexcept;
+	//è·å–æŒ‡å®šä½ç½®å­—ç¬¦ï¼Œä¸è¿›è¡Œè¶Šç•Œæ£€æŸ¥
+	uint8_t& operator[](size_t pos) noexcept;
 
-	//»ñÈ¡Ö¸¶¨Î»ÖÃ×Ö·û£¬Ô½½ç»á»ØËİ
+	//è·å–æŒ‡å®šä½ç½®å­—ç¬¦ï¼Œè¶Šç•Œä¼šå›æº¯
 	uint8_t& operator()(size_t pos) noexcept;
 
-	//·µ»ØÒ»¸ö±ê×¼c++ string
+	//è¿”å›ä¸€ä¸ªæ ‡å‡†c++ string
 	std::string toStdString();
 
-	//»ñÈ¡²»´ø0½áÎ²µÄ×Ö·û´®
+	//è·å–ä¸å¸¦0ç»“å°¾çš„å­—ç¬¦ä¸²
 	inline uint8_t* str() const{return content;};
 
-	//»ñÈ¡µÚÒ»¸ö×Ö·ûµÄµØÖ·
+	//è·å–ç¬¬ä¸€ä¸ªå­—ç¬¦çš„åœ°å€
 	inline uint8_t* begin() { return (uint8_t*)content;}
 
-	//»ñÈ¡×îºóÒ»¸ö×Ö·ûµÄÏÂÒ»¸öµØÖ·
+	//è·å–æœ€åä¸€ä¸ªå­—ç¬¦çš„ä¸‹ä¸€ä¸ªåœ°å€
 	inline uint8_t* end(){return (uint8_t*)content+length;}
 
-	//·µ»Ø³¤¶ÈÊÇ·ñÎª0
-	inline bool empty() noexcept {return (length == 0);}
+	//è¿”å›é•¿åº¦æ˜¯å¦ä¸º0
+	inline bool empty() noexcept { return (length == 0); }
+
 //#pragma endregion
 
 //#pragma region binstream operate
@@ -137,18 +146,18 @@ public:
 	~binstream();
 protected:
 
-	//ÔÚµ±Ç°×Ö·û´®ºó×·¼Ó×Ö·û´®
-	//×·¼Ó³¤¶ÈÎª0µÄ×Ö·û´®½«²»»á¸Ä±äÔ­×Ö·û´®
+	//åœ¨å½“å‰å­—ç¬¦ä¸²åè¿½åŠ å­—ç¬¦ä¸²
+	//è¿½åŠ é•¿åº¦ä¸º0çš„å­—ç¬¦ä¸²å°†ä¸ä¼šæ”¹å˜åŸå­—ç¬¦ä¸²
 	void _append(const uint8_t* con, size_t _length);
 
-	//ÉèÖÃÒ»´®×Ö·û´®£¬½«¸²¸ÇÖ®Ç°µÄ×Ö·û´®
-	//ÉèÖÃ³¤¶ÈÎª0µÄ×Ö·û´®»áÊ¹×Ö·û´®³¤¶ÈÎª0
+	//è®¾ç½®ä¸€ä¸²å­—ç¬¦ä¸²ï¼Œå°†è¦†ç›–ä¹‹å‰çš„å­—ç¬¦ä¸²
+	//è®¾ç½®é•¿åº¦ä¸º0çš„å­—ç¬¦ä¸²ä¼šä½¿å­—ç¬¦ä¸²é•¿åº¦ä¸º0
 	void _set(const uint8_t* con, size_t _length);
 
-	//ÖØĞÂ·ÖÅä¿Õ¼ä£¬´óĞ¡Îªcap
+	//é‡æ–°åˆ†é…ç©ºé—´ï¼Œå¤§å°ä¸ºcap
 	void _recap(size_t _cap);
 
-	//ÖØĞÂ·ÖÅä¿Õ¼ä£¬´óĞ¡Îªcap,ÇÒ±£ÁôÒÔÇ°¿Õ¼äÄÚÈİ
+	//é‡æ–°åˆ†é…ç©ºé—´ï¼Œå¤§å°ä¸ºcap,ä¸”ä¿ç•™ä»¥å‰ç©ºé—´å†…å®¹
 	void _recap_hold(size_t _cap);
 
 private:
@@ -158,8 +167,27 @@ private:
 };
 
 template<class T>
-inline binstream binstream::from(T n) {
-	return binstream(std::to_string(n));
+inline binstream binstream::from(const T n) {
+	binstream bins;
+	std::stringstream strs;
+	strs << n;
+	strs >> bins;
+	return binstream(bins);
+}
+
+template<class T>
+inline T binstream::to(){
+	//does not support boolean
+	T x{};
+	std::stringstream strs;
+	strs << *this;
+	strs >> x;
+	return x;
+}
+
+template<>
+inline std::string binstream::to() {
+	return this->toStdString();
 }
 
 _NAP_END

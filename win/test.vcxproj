@@ -23,9 +23,6 @@
     <ClCompile Include="..\test\unit.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\README.md" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\test\unit.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -81,27 +78,27 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>../src;E:\MyProgram\cryptopp-CRYPTOPP_6_1_0;$(IncludePath)</IncludePath>
-    <LibraryPath>../output/x86/Debug/;$(LibraryPath);E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\output</LibraryPath>
-    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <LibraryPath>../output/vstemp/libnap/x86/Debug/;$(LibraryPath);E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\output</LibraryPath>
+    <OutDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>../src;E:\MyProgram\cryptopp-CRYPTOPP_6_1_0;$(IncludePath)</IncludePath>
-    <LibraryPath>../output/x86/Release/;$(LibraryPath);E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\output</LibraryPath>
-    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <LibraryPath>../output/vstemp/libnap/x86/Release/;$(LibraryPath);E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\output</LibraryPath>
+    <OutDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>../src;E:\MyProgram\cryptopp-CRYPTOPP_6_1_0;$(IncludePath)</IncludePath>
-    <LibraryPath>../output/x64/Debug/;$(LibraryPath);E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\output</LibraryPath>
-    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <LibraryPath>../output/vstemp/libnap/x64/Debug/;$(LibraryPath);E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\output</LibraryPath>
+    <OutDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>../src;E:\MyProgram\cryptopp-CRYPTOPP_6_1_0;$(IncludePath)</IncludePath>
-    <LibraryPath>../output/x64/Release/;$(LibraryPath);E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\output</LibraryPath>
-    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <LibraryPath>../output/vstemp/libnap/x64/Release/;$(LibraryPath);E:\MyProgram\cryptopp-CRYPTOPP_6_1_0\output</LibraryPath>
+    <OutDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

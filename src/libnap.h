@@ -6,3 +6,4 @@
 #include "hash.h"
 #include "trans.h"
 #include "net.h"
+#include "json.h"

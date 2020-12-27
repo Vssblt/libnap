@@ -97,6 +97,7 @@ tcpseraccept create_napcom_test(tcpserver* server, tcpclient* client) {
 
 
 int main() {
+
 	net::init();
 
 	assert(binstream_test());
@@ -195,6 +196,28 @@ int main() {
 			return true;
 		});
 		unitaesecb.print();
+
+		Unit unitjson("JSON");
+		unitjson.test([](binstream* p, int n)->bool {
+			assert(n == 2);
+
+			JsonParser json;
+			bool res = json.parse(p[0]);
+			if (!res) {
+				//cout << json.getError();
+				return false;
+			} else {
+				JsonNode& root = json.root();
+
+				JsonStringify ify;
+				binstream result = ify.stringify(root);
+
+				return (result == p[1]);
+			}
+		});
+		unitjson.print();
+
+
 	}
 	catch (const char* e) {
 		std::cout << "TEST-EXCEPTION: " << e<<endl;

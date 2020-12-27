@@ -5,9 +5,6 @@
     <ClCompile Include="..\test\unit.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\README.md" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\test\unit.h" />
   </ItemGroup>
 </Project>

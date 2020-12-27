@@ -18,12 +18,13 @@
 #include <future>
 #include <stdexcept>
 #include <stdint.h>
-
+#include <sstream>
 
 typedef unsigned char byte;
 
 #define _NAP_BEGIN namespace nap{
 #define _NAP_END }
+
 //#define _NAP ::nap::
 
 //linux support
@@ -112,5 +113,3 @@ inline T min(T a, T b) {
 void msleep(uint64_t millisecond);
 
 _NAP_END
-
-

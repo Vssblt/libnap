@@ -16,8 +16,8 @@ Unit::Unit(const char* _m):name(_m){
 	if (!ifs.is_open()) {
 		throw "File open fail";
 	}
-	char buffer[10];
-	ifs.getline(buffer, 10);
+	char buffer[20];
+	ifs.getline(buffer, 20);
 	if (3 != sscanf(buffer, "%d %d %d", &num, &line, &line_max_char))
 		throw "Wrong format";
 
@@ -62,10 +62,14 @@ void Unit::init(){
 	for (int i = 0; i < num; i++) {
 		unit[i] = new binstream[line];
 		for (int n = 0; n < line; n++) {
+			memset(buffer, 0, line_max_char);
 			ifs.getline(buffer, line_max_char);
-			int len = ifs.gcount();
-			if (len == 0)
-				throw "Number of test cases or maximum length error";
+			int len = (int)ifs.gcount();
+			if (len == 0) {
+				cout << strlen(buffer) <<" -- !"<<endl;
+				throw "Number of test cases or maximum length error : eof is true";
+			}
+				
 			if (buffer[len - 1] == 0) len--;
 			if (buffer[len - 1] == '\r'||
 				buffer[len - 1] == '\n'

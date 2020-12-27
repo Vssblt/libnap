@@ -71,24 +71,24 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</IntDir>
     <TargetName />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\output\$(PlatformShortName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\output\vstemp\$(ProjectName)\$(PlatformShortName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -102,7 +102,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(ProjectDir)..\output\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\output\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
+      <Command>copy $(ProjectDir)..\output\vstemp\libnap\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\output\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
 </Command>
     </PostBuildEvent>
     <PreBuildEvent>
@@ -125,7 +125,7 @@ copy $(ProjectDir)..\src\*.h $(ProjectDir)..\output\ /Y</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(ProjectDir)..\output\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\output\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
+      <Command>copy $(ProjectDir)..\output\vstemp\libnap\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\output\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
 </Command>
     </PostBuildEvent>
     <PreBuildEvent>
@@ -152,7 +152,7 @@ copy $(ProjectDir)..\src\*.h $(ProjectDir)..\output\ /Y</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(ProjectDir)..\output\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\output\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
+      <Command>copy $(ProjectDir)..\output\vstemp\libnap\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\output\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
 </Command>
     </PostBuildEvent>
     <PreBuildEvent>
@@ -179,7 +179,7 @@ copy $(ProjectDir)..\src\*.h $(ProjectDir)..\output\ /Y</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy $(ProjectDir)..\output\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\output\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
+      <Command>copy $(ProjectDir)..\output\vstemp\libnap\$(PlatformTarget)\$(ConfigurationName)\libnap.lib  $(ProjectDir)..\output\libnap_$(PlatformTarget)_$(ConfigurationName).lib /Y
 </Command>
     </PostBuildEvent>
     <PreBuildEvent>

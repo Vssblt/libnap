@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "nap_common.h"
 #include "binstream.h"
 _NAP_BEGIN
@@ -14,7 +14,7 @@ public:
 	SHA256();
 
 	binstream calculator();
-	void add(const char* data, uint32_t len);
+	void add(const char* data, size_t len);
 
 private:
 

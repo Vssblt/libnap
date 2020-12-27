@@ -7,9 +7,9 @@ typedef const char* Key;
 typedef uint8_t* Matrix4x4;
 
 enum class AesPadding {
-	PKCS5, //Ìî³äÌî³äÊı
-	ISO10126,//×îºóÒ»Î»Ìî³äÌî³äÊı£¬ÆäÓàËæ»ú
-	Zeros,  //0Ìî³ä½âÃÜÊ±²»»á×Ô¶¯È¥³ı
+	PKCS5, //å¡«å……å¡«å……æ•°
+	ISO10126,//æœ€åä¸€ä½å¡«å……å¡«å……æ•°ï¼Œå…¶ä½™éšæœº
+	Zeros,  //0å¡«å……è§£å¯†æ—¶ä¸ä¼šè‡ªåŠ¨å»é™¤
 	PKCS7
 };
 
@@ -17,8 +17,6 @@ enum class AesType {
 	ECB,
 	CBC
 };
-
-
 
 
 class Aes {
@@ -32,45 +30,45 @@ public:
 	~Aes();
 	Aes(Aes&&) noexcept;
 private:
-	////ECBÄ£Ê½µÄ¼ÓÃÜ½âÃÜ
+	////ECBæ¨¡å¼çš„åŠ å¯†è§£å¯†
 	//void ecb_encode();
 	//void ecb_decode(uint8_t* matrix4x4);
 
-	//16byte¼Ó½âÃÜ(µ¥¿é¼Ó½âÃÜ)
+	//16byteåŠ è§£å¯†(å•å—åŠ è§£å¯†)
 	void _16encode(Matrix4x4 matrix4x4);
 	void _16decode(Matrix4x4 matrix4x4);
 
-	//ÉèÖÃÃÜÔ¿
+	//è®¾ç½®å¯†é’¥
 	void setKey(uint8_t key[16]);
 
-	//¾ØÕó×ª»»
+	//çŸ©é˜µè½¬æ¢
 	void char2matrix4x4(Matrix4x4 out,const uint8_t* in);
 	void matrix4x42char(uint8_t* out,const Matrix4x4 in);
 
-	//ÃÜÔ¿À©Õ¹
+	//å¯†é’¥æ‰©å±•
 	void keyexpan(uint8_t* key);
 
-	//×Ö½ÚÌæ»»
+	//å­—èŠ‚æ›¿æ¢
 	void subbytes(uint8_t* matrix4x4);
 	void invsubbytes(uint8_t* matrix4x4);
 
-	//ĞĞÒÆÎ»
+	//è¡Œç§»ä½
 	void leftshift(uint8_t* matrix1x4, int b);
 	void rightshift(uint8_t* matrix1x4, int b);
 	void shiftrows(uint8_t* matrix4x4);
 	void invshiftrows(uint8_t* matrix4x4);
 
-	//ÁĞ»ìÏı
+	//åˆ—æ··æ·†
 	uint8_t g_num(uint8_t u, uint8_t v);
 	void mixcolumns(uint8_t* matrix4x4);
 	void invmixcolumns(uint8_t* matrix4x4);
 	
-	//ÂÖÃÜÔ¿¼Ó
+	//è½®å¯†é’¥åŠ 
 	void addroundkey(uint8_t* matrix4x4, uint32_t* _4rkey);
 
 	uint8_t* iv = nullptr;
-	uint32_t keyse[44] = {0}; //¼ÓÃÜÃÜÔ¿¾ØÕó
-	uint32_t keysd[44] = {0}; //½âÃÜÃÜÔ¿¾ØÕó
+	uint32_t keyse[44] = {0}; //åŠ å¯†å¯†é’¥çŸ©é˜µ
+	uint32_t keysd[44] = {0}; //è§£å¯†å¯†é’¥çŸ©é˜µ
 	const AesPadding padd;
 	const AesType type;
 
