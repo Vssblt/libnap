@@ -30,6 +30,7 @@ public:
 	~Aes();
 	Aes(Aes&&) noexcept;
 private:
+
 	////ECB模式的加密解密
 	//void ecb_encode();
 	//void ecb_decode(uint8_t* matrix4x4);
