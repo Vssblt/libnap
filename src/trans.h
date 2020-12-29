@@ -25,16 +25,7 @@ private:
 
 class Base64 {
 public:
-	//base 支持安全模式
-	//	binstream 支持 []
-	//		base64测试用例 
 
-	//	aes支持大量数据
-
-	//	写文档
-
-
-	//not support safe base64 !
 	static binstream encode(binstream& mem, bool safe = false);
 	static binstream decode(binstream& mem, bool safe = false);
 
@@ -42,7 +33,6 @@ private:
 
 	static void enblock(uint8_t* str, uint8_t* base, const char*);
 	static void deblock(uint8_t* str, uint8_t* base, const char*);
-
 
 };
 

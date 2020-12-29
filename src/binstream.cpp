@@ -180,11 +180,13 @@ binstream::~binstream(){
 void binstream::_append(const uint8_t* con, size_t _length){
 	if (_length <= 0 || con == nullptr) return;
 
-	size_t countlength = _length + length;
+	size_t totallength = _length + length;
 
-	if (countlength > capacity) {
-		countlength = (countlength < 15) ? 15 : countlength;
-		uint8_t* temp_con = new uint8_t[countlength];
+	if (totallength > capacity) {
+
+		totallength = totallength | 15;
+
+		uint8_t* temp_con = new uint8_t[totallength];
 
 		if (length > 0)//防止之前是空串
 			memcpy(temp_con, content, static_cast<size_t>(length));
@@ -197,9 +199,9 @@ void binstream::_append(const uint8_t* con, size_t _length){
 
 		delete[] content;
 		content = temp_con;
-		capacity = countlength;
-	}
-	else {
+		capacity = totallength;
+
+	}else {
 		memcpy(content + length, con, _length);
 	}
 
@@ -227,8 +229,8 @@ void binstream::_recap(size_t _cap){
 			delete[] content;
 			content = nullptr;
 		}
-	}
-	else {
+	}else {
+
 		if (_cap < 15ll)
 			_cap = 15ll;
 

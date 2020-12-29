@@ -74,10 +74,10 @@ bool binstream_test() {
 }
 bool net_test() {
 	net::init();
-	binstream ip("1.2.3.4");
-	sockaddr_in addr = net::make_addr(1256, ip.toStdString().c_str());
+	binstream ip("127.0.0.1");
+	sockaddr_in addr = net::make_addr(12567, ip.toStdString().c_str());
 	assert(net::getsIp(addr) == ip);
-	assert(net::getPort(addr) == 1256);
+	assert(net::getPort(addr) == 12567);
 	assert(net::getsIp(net::getnIp(addr)) ==ip);
 	return true;
 }
@@ -107,8 +107,8 @@ int main() {
 	try {
 		{ //Ïú»ÙÁ´½Ó
 			Unit napcom("NAPCOM");
-			tcpserver server(8087);
-			tcpclient client(8087, "127.0.0.1");
+			tcpserver server(18087);
+			tcpclient client(18087, "127.0.0.1");
 			tcpseraccept acc = create_napcom_test(&server, &client);
 			napcom.test([&](binstream* p, int n)->bool {
 				assert(n == 1);

@@ -14,9 +14,8 @@ _NAP_BEGIN
 class binstream {
 public:
 
-	//uint32_t hash(); 以后有空再测试
+	//uint32_t hash();
 
-	
 	
 	void swap(binstream& b);//交换两个字符串
 	static binstream shift(char** buffer, size_t len); //将字符串转移到binstream
