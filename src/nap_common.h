@@ -51,7 +51,6 @@ typedef unsigned char byte;
 	typedef int socket_t;
 #endif
 
-//windows support
 #ifdef _WIN32
 	#define WINDOWS
 	#ifdef _WIN64
@@ -64,7 +63,6 @@ typedef unsigned char byte;
 	#include <ws2tcpip.h>
 	#pragma comment (lib,"ws2_32")
 	#define MSG_NOSIGNAL 0
-	/*#define MSG_DONTWAIT 0*/
 
 	typedef SOCKET socket_t;
 #endif
@@ -77,7 +75,6 @@ typedef unsigned char byte;
 
 _NAP_BEGIN
 
-
 //Simple hash function
 uint32_t mhash(const char* str, uint32_t len);
 
@@ -87,6 +84,12 @@ uint32_t timestamp();
 //Random
 template<class T = int>
 T random(T min, T max);
+
+//Delay function
+void msleep(uint64_t millisecond);
+
+
+
 
 
 
@@ -108,8 +111,5 @@ template<class T>
 inline T min(T a, T b) {
 	return (a < b) ? a : b;
 }
-
-
-void msleep(uint64_t millisecond);
 
 _NAP_END

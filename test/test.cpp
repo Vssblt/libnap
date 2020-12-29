@@ -9,14 +9,6 @@
 using namespace std;
 using namespace nap;
 
-/*
-内存池(gc)
-线程池
-反射
-日志
-反射
-*/
-
 
 bool binstream_test() {
 	for (int i = 0; i < 1000; i++) {

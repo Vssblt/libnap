@@ -1,36 +1,26 @@
 #pragma once
 #include "nap_common.h"
-
-
 _NAP_BEGIN
-
-////字符串操作
-//	binstream substr(int pos, int length);
-
-////foreach support
-//	
-//
 
 class binstream {
 public:
 
-	//uint32_t hash();
 
-	
 	void swap(binstream& b);//交换两个字符串
 	static binstream shift(char** buffer, size_t len); //将字符串转移到binstream
 
 	template <class T>
-	T to();
-
+	T to(); //强制转换
 
 	template <class T>
-	static binstream from(const T num); //转字符串
+	static binstream from(const T num);  //T类型转字符串
 
 
-//#pragma region binstream construct
+	inline size_t size() const { return length; }
+	inline size_t cap() const { return capacity; }
 	
 	binstream() {};
+	~binstream();
 	binstream(const void* c, size_t len)noexcept;
 	binstream(const char* c)noexcept;
 	binstream(const std::string& str)noexcept;
@@ -38,53 +28,37 @@ public:
 	binstream(const binstream& old) noexcept;
 	binstream(binstream&& old) noexcept;
 
-//#pragma endregion
-
-//#pragma region binstream operate
-
 	friend binstream operator+(const char* s1, binstream& s2);
 	friend binstream operator+(binstream& s1, const char* s2);
 	friend binstream operator+(const std::string& s1, binstream& s2);
 	friend binstream operator+(binstream& s1, const std::string& s2);
-
 	binstream operator+(const binstream& s);
-
-//#pragma endregion +
-
-//#pragma region binstream operate
 
 	void operator+=(const binstream& o) {append(o);}
 	void operator+=(const char* o) { append(o, strlen(o)); }
 	void operator+=(const std::string& o) { append(o); }
 	void operator+=(const char c) {append(&c,1);}
-
-//#pragma endregion +=
-
-//#pragma region binstream operate
+	void append(const void* c, size_t len);
+	void append(const std::string& str);
+	void append(const binstream& str);
 
 	bool operator==(const binstream& o);
-	inline bool operator!=(const binstream& o) {return !(*this == o);}
-
 	bool operator==(const void* str);
-	inline bool operator!=(const void* str) {return !(*this == str);}
-
 	bool operator==(const std::string& str);
+	inline bool operator!=(const binstream& o) {return !(*this == o);}
+	inline bool operator!=(const void* str) {return !(*this == str);}
 	inline bool operator!=(const std::string& str) {return !(*this == str);}
-
-//#pragma endregion  == / != 
-
-//#pragma region binstream operate
 
 	binstream& operator=(const binstream& old) noexcept;
 	binstream& operator=(const std::string& str) noexcept;
 	binstream& operator=(const char* str) noexcept;
 
-//#pragma endregion  =
 
-//#pragma region binstream setter
+	friend std::ostream& operator<<(std::ostream& out, const binstream& b);
+	friend std::istream& operator>>(std::istream& is, binstream& b);
 
-	//填充指定长度字符，会删除以前字符串内容
-	void fill(uint8_t c, size_t len);
+	
+	void fill(uint8_t c, size_t len); //填充指定长度字符，会删除以前字符串内容
 
 	//预留指定长度空间，会删除以前字符串内容
 	//执行完后length为0，capacity大于等于参数len
@@ -94,20 +68,9 @@ public:
 	//执行完后length为len，capacity大于等于参数len
 	void resize(size_t len);
 
-	//追加字符
-	void append(const void* c, size_t len);
-	void append(const std::string& str);
-	void append(const binstream& str);
 
 	//将长度设置为0
 	void clean() noexcept {length = 0;}
-
-//#pragma endregion
-
-//#pragma region binstream getter
-
-	inline size_t size() const { return length; }
-	inline size_t cap() const { return capacity; }
 
 	//获取指定位置字符，越界抛出异常
 	uint8_t at(size_t pos);
@@ -133,16 +96,6 @@ public:
 	//返回长度是否为0
 	inline bool empty() noexcept { return (length == 0); }
 
-//#pragma endregion
-
-//#pragma region binstream operate
-
-	friend std::ostream& operator<<(std::ostream& out, const binstream& b);
-	friend std::istream& operator>>(std::istream& is, binstream& b);
-
-//#pragma endregion out<<str  in>>str
-
-	~binstream();
 protected:
 
 	//在当前字符串后追加字符串

@@ -2,23 +2,6 @@
 _NAP_BEGIN
 
 
-//uint32_t binstream::hash() {
-//	if (content == nullptr) return 0;
-//	uint8_t* str = content;
-//	uint32_t hash = 0;
-//	uint32_t x = 0;
-//	uint32_t i = 0;
-//	for (i = 0; i < length; str++, i++) {
-//		hash = (hash << 4) + (*str);
-//		if ((x = hash & 0xF0000000L) != 0) {
-//			hash ^= (x >> 24);
-//		}
-//		hash &= ~x;
-//	}
-//	return hash;
-//}
-
-
 void binstream::swap(binstream& b){
 
 	uint8_t* temp_content = this->content;

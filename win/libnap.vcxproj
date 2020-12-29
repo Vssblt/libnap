@@ -165,6 +165,7 @@
     <ClInclude Include="..\src\libnap.h" />
     <ClInclude Include="..\src\nap_common.h" />
     <ClInclude Include="..\src\net.h" />
+    <ClInclude Include="..\src\threadpool.h" />
     <ClInclude Include="..\src\trans.h" />
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +175,7 @@
     <ClCompile Include="..\src\json.cpp" />
     <ClCompile Include="..\src\nap_common.cpp" />
     <ClCompile Include="..\src\net.cpp" />
+    <ClCompile Include="..\src\threadpool.cpp" />
     <ClCompile Include="..\src\trans.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

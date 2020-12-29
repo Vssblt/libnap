@@ -30,6 +30,9 @@
     <ClInclude Include="..\src\json.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\threadpool.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\nap_common.cpp">
@@ -51,6 +54,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\json.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\threadpool.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
