@@ -47,7 +47,6 @@ auto ThreadPool::push(F&& f, Args&&... args)
             throw "enqueue on stopped ThreadPool";
         std::unique_lock<std::mutex> lock(queue_mutex);
 
-
         tasks.emplace(
             [task]() {
                 (*task)(); 

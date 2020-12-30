@@ -159,22 +159,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\src\aes.h" />
+    <ClInclude Include="..\src\bignum.h" />
     <ClInclude Include="..\src\binstream.h" />
     <ClInclude Include="..\src\hash.h" />
     <ClInclude Include="..\src\json.h" />
     <ClInclude Include="..\src\libnap.h" />
+    <ClInclude Include="..\src\log.h" />
     <ClInclude Include="..\src\nap_common.h" />
     <ClInclude Include="..\src\net.h" />
+    <ClInclude Include="..\src\rsa.h" />
     <ClInclude Include="..\src\threadpool.h" />
     <ClInclude Include="..\src\trans.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\aes.cpp" />
+    <ClCompile Include="..\src\bignum.cpp" />
     <ClCompile Include="..\src\binstream.cpp" />
     <ClCompile Include="..\src\hash.cpp" />
     <ClCompile Include="..\src\json.cpp" />
+    <ClCompile Include="..\src\log.cpp" />
     <ClCompile Include="..\src\nap_common.cpp" />
     <ClCompile Include="..\src\net.cpp" />
+    <ClCompile Include="..\src\rsa.cpp" />
     <ClCompile Include="..\src\threadpool.cpp" />
     <ClCompile Include="..\src\trans.cpp" />
   </ItemGroup>

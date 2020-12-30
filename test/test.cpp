@@ -90,6 +90,12 @@ tcpseraccept create_napcom_test(tcpserver* server, tcpclient* client) {
 
 int main() {
 
+	BigNum num((int64_t)-125);
+	num.print();
+
+	_getch();
+	return false;
+
 	net::init();
 
 	assert(binstream_test());

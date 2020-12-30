@@ -33,6 +33,15 @@
     <ClInclude Include="..\src\threadpool.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\log.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\rsa.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\bignum.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\nap_common.cpp">
@@ -57,6 +66,15 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\src\threadpool.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\log.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rsa.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\bignum.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
