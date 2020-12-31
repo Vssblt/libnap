@@ -15,15 +15,14 @@ Trans模块用于base16和base64转换。
 /*
 	字符串转Hex
 */
-Hex hex;
 binstream msg("helloworld");
-binstream hexmsg = hex.toHex(msg, false); // 第二个参数值Hex的大小写
+binstream hexmsg = Hex::encode(msg, false); // 第二个参数值Hex的大小写
 cout << hexmsg;
 
 /*
 	将Hex转为原始字符串
 */
-binstream bin = hex.toBinary(hexmsg);
+binstream bin = Hex::decode(hexmsg);
 cout << bin;
 ```
 

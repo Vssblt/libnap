@@ -2,67 +2,56 @@
 _NAP_BEGIN
 
 ///////----------------hex
+
 //二进制转为可读十六进制
 #define HEX_TRANS(x,up) (((x)>0x09)?((x)+((up)?0x37:0x57)):((x)|0x30))
 #define STR_TRANS(x) (((x)<0x40)?((x)-0x30):(((x)<0x47)?((x)-0x37):(((x)<0x67)?((x)-0x57):0x10)))
 
 
-Hex::~Hex() {
-	delete[] buffer;
+
+binstream Hex::encode(binstream& mem,bool capital){
+	size_t res_len = mem.size() * 2LL;
+
+	binstream result;
+	result.resize(res_len);
+
+	uint8_t* _res_str = result.str();
+
+	const uint8_t* _m = mem.str();
+	const size_t _m_size = mem.size();
+
+	for (size_t i = 0; i < _m_size; i++) {
+		_res_str[i * 2] = HEX_TRANS(_m[i] >> 4, capital);
+		_res_str[i * 2 + 1] = HEX_TRANS(_m[i] & 0x0F, capital);
+	}
+
+	return std::move(result);
 }
 
-Hex::Hex(){
-	buffer = nullptr;
-	length = 0;
-}
+binstream Hex::decode(binstream& mem){
+	binstream result;
 
-binstream Hex::toHex(binstream& mem,bool up){
 	size_t len = mem.size();
-	to_hex(mem.str(), len,up);
-	return (binstream::shift((char**)&buffer,length));
-}
-
-binstream Hex::toBinary(binstream& mem){
-	to_bin(mem.str(), mem.size());
-	return (binstream::shift((char**)&buffer, length));
-}
-
-//trans to buffer
-void Hex::to_hex(const void* m, size_t len, bool up) {
-	if (buffer != nullptr) {
-		delete buffer;
-		buffer = nullptr;
-	}
-	length = len * 2LL;
-	buffer = new uint8_t[length];
-	
-	const uint8_t* _m = (uint8_t*)m;
-	for (size_t i = 0; i < len; i++) {
-		buffer[i * 2] = HEX_TRANS(_m[i] >> 4,up);
-		buffer[i * 2 + 1] = HEX_TRANS(_m[i] & 0x0F,up);
-	}
-}
-
-void Hex::to_bin(const void* m, size_t len){
-	if (buffer != nullptr) {
-		delete buffer;
-		buffer = nullptr;
-	}
 
 	bool odd = !(len % 2 == 0);
-	length = len / 2;
+	size_t length = len / 2;
 	if (odd)
 		length++;
-	buffer = new uint8_t[length];
 
-	const uint8_t* _m = (uint8_t*)m;
+	result.resize(length);
+
+	uint8_t* buffer = result.str();
+	const uint8_t* _m = mem.str();
+	
 	for (size_t i = 0; i < length; i++) {
-		buffer[i] = (STR_TRANS(_m[i * 2]))<< 4;
-		if (!odd || (i*2ll+1<len))
+		buffer[i] = (STR_TRANS(_m[i * 2])) << 4;
+		if (!odd || (i * 2ll + 1 < len))
 			buffer[i] += STR_TRANS(_m[i * 2 + 1]); //还没做偶数次
 	}
-
+	return std::move(result);
 }
+
+
 
 ///////----------------base64
 

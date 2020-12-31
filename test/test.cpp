@@ -141,12 +141,11 @@ int main() {
 		Unit unit256("SHA256");
 		unit256.test([](binstream* p, int n)->bool {
 			assert(n == 3);
-			Hex hex;
 			SHA256 S;
 			S.add((const char*)p[0].str(), p[0].size());
 			S.add((const char*)p[1].str(), p[1].size());
 			binstream sha256 = S.calculator();
-			binstream sha256_hex = hex.toHex(sha256, false);
+			binstream sha256_hex = Hex::encode(sha256, false);
 			return (sha256_hex == p[2]);
 		});
 		unit256.print();
@@ -154,16 +153,15 @@ int main() {
 		Unit unitaescbc("AES-128-CBC");
 		unitaescbc.test([](binstream* p, int n)->bool {
 			assert(n == 4);
-			Hex hex;
 			Aes aes = Aes::cipher((char*)p[1].str(),
 				AesPadding::PKCS5, AesType::CBC, (char*)p[2].str());
 			//加密过程
 			binstream res = aes.encode((const char*)p[0].str(), p[0].size());
-			binstream res_hex = hex.toHex(res);
+			binstream res_hex = Hex::encode(res);
 			if (!(res_hex == p[3])) return false;
 			//解密过程
 			binstream res2;
-			binstream cipher = hex.toBinary(p[3]);
+			binstream cipher = Hex::decode(p[3]);
 			aes.decode((const char*)cipher.str(), cipher.size(), res2);
 			if (!(res2 == p[0])) return false;
 			return true;
@@ -173,16 +171,15 @@ int main() {
 		Unit unitaesecb("AES-128-ECB");
 		unitaesecb.test([](binstream* p, int n)->bool {
 			assert(n == 3);
-			Hex hex;
 			Aes aes = Aes::cipher((char*)p[1].str(),
 				AesPadding::PKCS5, AesType::ECB);
 			//加密过程
 			binstream res = aes.encode((const char*)p[0].str(), p[0].size());
-			binstream res_hex = hex.toHex(res);
+			binstream res_hex = Hex::encode(res);
 			if (!(res_hex == p[2])) return false;
 			//解密过程
 			binstream res2;
-			binstream cipher = hex.toBinary(p[2]);
+			binstream cipher = Hex::decode(p[2]);
 			aes.decode((const char*)cipher.str(), cipher.size(), res2);
 			if (!(res2 == p[0])) return false;
 			return true;
