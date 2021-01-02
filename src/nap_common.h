@@ -19,6 +19,7 @@
 #include <stdexcept>
 #include <stdint.h>
 #include <sstream>
+#include <list>
 
 typedef unsigned char byte;
 
@@ -84,13 +85,6 @@ uint32_t timestamp();
 //Random
 template<class T = int>
 T random(T min, T max);
-
-//Delay function
-void msleep(uint64_t millisecond);
-
-
-
-
 
 
 template<class T>

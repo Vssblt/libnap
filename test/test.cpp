@@ -89,7 +89,6 @@ tcpseraccept create_napcom_test(tcpserver* server, tcpclient* client) {
 
 
 int main() {
-
 	net::init();
 
 	assert(binstream_test());
@@ -114,7 +113,7 @@ int main() {
 					return false;
 
 				binstream temp;
-				msleep(70);
+				Timer::sleep_ms(70);
 				auto ret = client.communicate()->recvpackage(temp);
 				if (napcom::ret::success != ret)
 					return false;
