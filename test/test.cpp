@@ -11,57 +11,55 @@ using namespace nap;
 
 
 bool binstream_test() {
-	for (int i = 0; i < 1000; i++) {
 
-		binstream str;
-		binstream str_2(100);
-		str = "Whatever is worth doing is worth doing well.";
-		//cout << str;
-		str = std::string("In love folly is always sweet.");
-		//cout << endl<<str<<endl;
+	binstream str;
+	binstream str_2(100);
+	str = "Whatever is worth doing is worth doing well.";
+	//cout << str;
+	str = std::string("In love folly is always sweet.");
+	//cout << endl<<str<<endl;
 
-		str.reserve(100);
-		str.append("hello world", 11);
-		str.append(string("\nThis is the NapStream"));
-		//cout << str.toStdString() <<endl;
-		const char* teststr = "hello world\nThis is the NapStream";
+	str.reserve(100);
+	str.append("hello world", 11);
+	str.append(string("\nThis is the NapStream"));
+	//cout << str.toStdString() <<endl;
+	const char* teststr = "hello world\nThis is the NapStream";
 
-		//operate ==
-		assert(str == teststr);
-		assert(str == str.toStdString());
-		assert(!(str != teststr));
-		assert(!(str != str.toStdString()));
+	//operate ==
+	assert(str == teststr);
+	assert(str == str.toStdString());
+	assert(!(str != teststr));
+	assert(!(str != str.toStdString()));
 
-		//construct
-		assert(str == binstream(teststr));
-		assert(str == binstream(string(teststr)));
-		assert(str == binstream(teststr, strlen(teststr)));
-		assert(str == binstream(std::move(binstream(str))));
+	//construct
+	assert(str == binstream(teststr));
+	assert(str == binstream(string(teststr)));
+	assert(str == binstream(teststr, strlen(teststr)));
+	assert(str == binstream(std::move(binstream(str))));
 
-		assert(str == str);
-		assert(memcmp(str.str(), teststr, strlen(teststr)) == 0);
+	assert(str == str);
+	assert(memcmp(str.str(), teststr, strlen(teststr)) == 0);
 
-		//operate=
-		str_2 = str;
-		assert(str_2.toStdString() == str.toStdString());
+	//operate=
+	str_2 = str;
+	assert(str_2.toStdString() == str.toStdString());
 
-		//operate +=
-		str.reserve(1);
-		str = "test";
-		str += str;
-		str += "-test";
-		str += string("test");
-		assert(str == "testtest-testtest");
+	//operate +=
+	str.reserve(1);
+	str = "test";
+	str += str;
+	str += "-test";
+	str += string("test");
+	assert(str == "testtest-testtest");
 
 
-		str_2.fill('-', 10);
+	str_2.fill('-', 10);
+	//cout << str_2 << endl;
+	for (int i = 9; i > 0; i--) {
+		str_2.resize(i);
 		//cout << str_2 << endl;
-		for (int i = 9; i > 0; i--) {
-			str_2.resize(i);
-			//cout << str_2 << endl;
-		}
-
 	}
+
 	return true;
 }
 bool net_test() {
@@ -89,9 +87,6 @@ tcpseraccept create_napcom_test(tcpserver* server, tcpclient* client) {
 
 
 int main() {
-
-	net::init();
-
 	assert(binstream_test());
 	assert(net_test());
 	std::cout << "Module Net Test passed" << endl;

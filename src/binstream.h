@@ -24,7 +24,7 @@ public:
 	binstream(const void* c, size_t len)noexcept;
 	binstream(const char* c)noexcept;
 	binstream(const std::string& str)noexcept;
-	binstream(size_t len)noexcept { _recap(len); }
+	explicit binstream(size_t len)noexcept { _recap(len); }
 	binstream(const binstream& old) noexcept;
 	binstream(binstream&& old) noexcept;
 
