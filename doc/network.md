@@ -46,6 +46,7 @@ napcom* communicate = client.communicate();
 ## 服务端使用流程
 
 ```c++
+using namespace nap;
 /*
 	初始化net库，如果没有初始化会发生通信错误。初始化只需要在整个程序里初始化一次即可
 */
@@ -67,7 +68,7 @@ if (server->bind() == false){
 /*
 	尝试监听端口，如果失败返回false
 */
-if (server->listen()) == false){
+if (server->listen() == false){
         cout<<"bind fail";
     return false;
 }
@@ -98,13 +99,13 @@ while(true){
         	获取客户端的IP和端口
         */
         uint16_t port = acc.port();
-        binstream ip = acc. ip();
+        binstream ip = acc.ip();
             
             
         /*
 			获取连接的napcom对象，通过该对象进行数据传输
 		*/
-		napcom* communicate = client.communicate();
+		napcom* communicate = acc.communicate();
         
     }
     
