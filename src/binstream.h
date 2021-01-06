@@ -2,6 +2,8 @@
 #include "nap_common.h"
 _NAP_BEGIN
 
+
+
 class binstream {
 public:
 

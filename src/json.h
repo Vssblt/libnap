@@ -1,6 +1,7 @@
 #pragma once
 #include "nap_common.h"
 #include "binstream.h"
+#include <exception>
 _NAP_BEGIN
 
 #define SKIP_SPACE(N,ARR) while (ARR[N]==' '||ARR[N]=='\r'||ARR[N]=='\n'||ARR[N]=='\t') N++;
@@ -25,6 +26,8 @@ enum BasicJsonType {
 
 class JsonParser;
 class JsonStringify;
+
+
 
 /*
 * jsonNode
@@ -125,7 +128,6 @@ public:
 	JsonParser() {};
 
 	bool parse(binstream);
-	binstream getError();
 
 	JsonNode& root();
 
@@ -150,8 +152,6 @@ protected:
 private:
 	binstream json;
 	JsonNode _root;
-	binstream errorinfo;
-
 };
 
 

@@ -112,4 +112,41 @@ inline T min(T a, T b) {
 	return (a < b) ? a : b;
 }
 
+
+class NapException : std::exception{
+public:
+
+	NapException() noexcept{}
+
+	explicit NapException(const char* _message);
+
+	NapException(const NapException& _other) noexcept;
+
+	NapException& operator=(const NapException& _other) noexcept;
+
+	virtual ~NapException() noexcept;
+
+	virtual char const* what() const;
+
+private:
+
+	void _new_data(const char*,size_t = -1) noexcept;
+
+	char* _data = nullptr;
+	size_t _len = 0;
+
+};
+
+class BinstreamException : public NapException {
+public:
+	BinstreamException(const char* str)noexcept :NapException(str) {};
+};
+
+
+class JsonException : public NapException {
+public:
+	JsonException(const char* str)noexcept :NapException(str) {};
+};
+
+
 _NAP_END

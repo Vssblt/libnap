@@ -10,11 +10,7 @@ uint32_t timestamp() {
 
 void msleep(uint64_t millisecond) {
 #ifdef LINUX
-	//if ((millisecond * 1000) > UINT32_MAX) {
-	//	sleep(millisecond / 1000)
-	//}else {
 	usleep(millisecond * 1000);
-	//}
 #endif
 
 #ifdef WINDOWS
@@ -23,4 +19,58 @@ void msleep(uint64_t millisecond) {
 }
 
 
+NapException::NapException(const char* _message){
+	_new_data(_message);
+}
+
+NapException::NapException(const NapException& _other)noexcept {
+	this->_new_data(_other._data, _other._len);
+}
+
+NapException& NapException::operator=(const NapException& _other) noexcept{
+	if (this == &_other) {
+		return *this;
+	}
+	this->_new_data(_other._data, _other._len);
+	return *this;
+}
+
+NapException::~NapException() noexcept{
+	if (this->_data != nullptr) {
+		delete[] this->_data;
+		this->_data = nullptr;
+		this->_len = 0;
+	}
+}
+
+char const* NapException::what() const{
+	if (this->_len == 0) {
+		return  "Unknown exception";
+	}else {
+		return this->_data;
+	}
+}
+
+void NapException::_new_data(const char* str, size_t _ll) noexcept {
+	size_t len = 0;
+	if (_ll == -1)
+		len = strlen(str) + 1;
+	else
+		len = _ll;
+	
+	if (this->_data != nullptr) {
+		delete[] this->_data;
+		this->_data = nullptr;
+		this->_len = 0;
+	}
+
+	this->_data = new char[len];
+	this->_len = len;
+	memset(this->_data, 0, len);
+
+	strcpy_s(this->_data, len, str);
+}
+
+
 _NAP_END
+

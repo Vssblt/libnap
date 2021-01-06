@@ -131,7 +131,7 @@ void binstream::append(const binstream& str) {
 
 uint8_t binstream::at(size_t pos){
 	if (pos >= length) {
-		throw "Index out of bounds";
+		throw BinstreamException("Index out of bounds");
 		return 0;
 	}
 	else {

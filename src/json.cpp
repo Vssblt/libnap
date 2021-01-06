@@ -96,9 +96,6 @@ void JsonNode::setNull(bool null){
 
 ////////////////////
 
-binstream JsonParser::getError(){
-	return errorinfo;
-}
 
 JsonNode& JsonParser::root(){
 	return _root;
@@ -124,15 +121,12 @@ bool JsonParser::parse(binstream str) {
 			return false;
 		}
 	}
-	catch (const char* info) {
-		errorinfo = "Parse exception at ";
-		errorinfo += binstream::from<int>(p);
-		errorinfo += " : ";
-		errorinfo += info;
+	catch (BinstreamException e) {
+		this->setError(p, 2);
 		return false;
 	}
 	catch (...) {
-		errorinfo = "Parse exception: Unknown Exception";
+		throw JsonException("Parse exception : Unknown Exception");
 		return false;
 	}
 }
@@ -247,6 +241,7 @@ binstream JsonParser::getString(int pos,int& len){
 }
 
 void JsonParser::setError(int pos, int msg){
+	binstream errorinfo = "JsonException - ";
 	const char* errormsg[] = {
 		"Unexpected character at position ", //出现意外的字符
 		"Parse exception: Unknown Exception",//未知原因的解析异常
@@ -254,8 +249,9 @@ void JsonParser::setError(int pos, int msg){
 		"Unclosed string at pos: ", //未闭合的字符串
 		"Illegal character at position " //不合法的字符
 	};
-	errorinfo = errormsg[msg];
+	errorinfo += errormsg[msg];
 	errorinfo += binstream::from<int>(pos);
+	throw JsonException(errorinfo.toStdString().c_str());
 	return;
 }
 
