@@ -130,7 +130,7 @@ public:
 
 private:
 
-	void _new_data(const char*,size_t = -1) noexcept;
+	void _new_data(const char*,int = -1) noexcept;
 
 	char* _data = nullptr;
 	size_t _len = 0;

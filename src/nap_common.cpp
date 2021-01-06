@@ -51,9 +51,9 @@ const char* NapException::what() const noexcept{
 	}
 }
 
-void NapException::_new_data(const char* str, size_t _ll) noexcept {
-	size_t len = 0;
-	if (_ll == -1ull)
+void NapException::_new_data(const char* str, int _ll) noexcept {
+	int len = 0;
+	if (_ll == -1)
 		len = strlen(str) + 1;
 	else
 		len = _ll;
