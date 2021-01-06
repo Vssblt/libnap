@@ -126,7 +126,7 @@ public:
 
 	virtual ~NapException() noexcept;
 
-	virtual char const* what() const;
+	virtual const char* what() const noexcept;
 
 private:
 

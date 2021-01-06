@@ -121,7 +121,7 @@ bool JsonParser::parse(binstream str) {
 			return false;
 		}
 	}
-	catch (BinstreamException e) {
+	catch (BinstreamException& e) {
 		this->setError(p, 2);
 		return false;
 	}

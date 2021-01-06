@@ -43,7 +43,7 @@ NapException::~NapException() noexcept{
 	}
 }
 
-char const* NapException::what() const{
+const char* NapException::what() const noexcept{
 	if (this->_len == 0) {
 		return  "Unknown exception";
 	}else {
@@ -53,7 +53,7 @@ char const* NapException::what() const{
 
 void NapException::_new_data(const char* str, size_t _ll) noexcept {
 	size_t len = 0;
-	if (_ll == -1)
+	if (_ll == -1ull)
 		len = strlen(str) + 1;
 	else
 		len = _ll;
@@ -68,7 +68,7 @@ void NapException::_new_data(const char* str, size_t _ll) noexcept {
 	this->_len = len;
 	memset(this->_data, 0, len);
 
-	strcpy_s(this->_data, len, str);
+	strcpy(this->_data, str);
 }
 
 
