@@ -12,11 +12,10 @@ public:
 	static binstream shift(char** buffer, size_t len); //将字符串转移到binstream
 
 	template <class T>
-	T to(); //强制转换
+	T to() const; //强制转换
 
 	template <class T>
 	static binstream from(const T num);  //T类型转字符串
-
 
 	inline size_t size() const { return length; }
 	inline size_t cap() const { return capacity; }
@@ -33,8 +32,8 @@ public:
 	friend binstream operator+(const char* s1, binstream& s2);
 	friend binstream operator+(binstream& s1, const char* s2);
 	friend binstream operator+(const std::string& s1, binstream& s2);
-	friend binstream operator+(binstream& s1, const std::string& s2);
-	binstream operator+(const binstream& s);
+	friend binstream operator+(const binstream& s1, const std::string& s2);
+	binstream operator+(const binstream& s)const;
 
 	void operator+=(const binstream& o) {append(o);}
 	void operator+=(const char* o) { append(o, strlen(o)); }
@@ -44,12 +43,12 @@ public:
 	void append(const std::string& str);
 	void append(const binstream& str);
 
-	bool operator==(const binstream& o);
-	bool operator==(const void* str);
-	bool operator==(const std::string& str);
-	inline bool operator!=(const binstream& o) {return !(*this == o);}
-	inline bool operator!=(const void* str) {return !(*this == str);}
-	inline bool operator!=(const std::string& str) {return !(*this == str);}
+	bool operator==(const binstream& o) const;
+	bool operator==(const void* str) const;
+	bool operator==(const std::string& str) const;
+	inline bool operator!=(const binstream& o)const {return !(*this == o);}
+	inline bool operator!=(const void* str)const {return !(*this == str);}
+	inline bool operator!=(const std::string& str)const {return !(*this == str);}
 
 	binstream& operator=(const binstream& old) noexcept;
 	binstream& operator=(const std::string& str) noexcept;
@@ -59,7 +58,6 @@ public:
 	friend std::ostream& operator<<(std::ostream& out, const binstream& b);
 	friend std::istream& operator>>(std::istream& is, binstream& b);
 
-	
 	void fill(uint8_t c, size_t len); //填充指定长度字符，会删除以前字符串内容
 
 	//预留指定长度空间，会删除以前字符串内容
@@ -75,28 +73,19 @@ public:
 	void clean() noexcept {length = 0;}
 
 	//获取指定位置字符，越界抛出异常
-	uint8_t at(size_t pos);
+	uint8_t at(size_t pos)const;
 
 	//获取指定位置字符，不进行越界检查
-	uint8_t& operator[](size_t pos) noexcept;
+	uint8_t& operator[](size_t pos)const noexcept;
 
 	//获取指定位置字符，越界会回溯
-	uint8_t& operator()(size_t pos) noexcept;
+	uint8_t& operator()(size_t pos)const noexcept;
 
-	//返回一个标准c++ string
-	std::string toStdString();
-
-	//获取不带0结尾的字符串
-	inline uint8_t* str() const{return content;};
-
-	//获取第一个字符的地址
-	inline uint8_t* begin() { return (uint8_t*)content;}
-
-	//获取最后一个字符的下一个地址
-	inline uint8_t* end(){return (uint8_t*)content+length;}
-
-	//返回长度是否为0
-	inline bool empty() noexcept { return (length == 0); }
+	std::string toStdString()const;//返回一个标准c++ string
+	inline uint8_t* str() const{return content;};//获取不带0结尾的字符串
+	inline uint8_t* begin()const { return (uint8_t*)content;}
+	inline uint8_t* end()const {return (uint8_t*)content+length;}
+	inline bool empty()const noexcept { return (length == 0); }
 
 protected:
 
@@ -130,7 +119,7 @@ inline binstream binstream::from(const T n) {
 }
 
 template<class T>
-inline T binstream::to(){
+inline T binstream::to() const {
 	//does not support boolean
 	T x{};
 	std::stringstream strs;
@@ -140,7 +129,7 @@ inline T binstream::to(){
 }
 
 template<>
-inline std::string binstream::to() {
+inline std::string binstream::to() const {
 	return this->toStdString();
 }
 

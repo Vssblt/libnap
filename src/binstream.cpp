@@ -54,26 +54,26 @@ binstream::binstream(binstream&& old) noexcept {
 	old.content = nullptr;
 }
 
-binstream binstream::operator+(const binstream& s) {
+binstream binstream::operator+(const binstream& s) const {
 	binstream ret(size() + s.size());
 	ret.append(*this);
 	ret.append(s);
 	return ret;
 }
 
-bool binstream::operator==(const binstream& o) {
+bool binstream::operator==(const binstream& o) const{
 	if (&o == this) return true;
 	if (o.length != this->length) return false;
 	return (0 == memcmp(o.content, this->content, length));
 }
 
-bool binstream::operator==(const void* str) {
+bool binstream::operator==(const void* str) const {
 	size_t len = static_cast<size_t>(strlen((const char*)str));
 	if (this->length != len) return false;
 	return (0 == memcmp(str, this->content, length));
 }
 
-bool binstream::operator==(const std::string& str) {
+bool binstream::operator==(const std::string& str) const {
 	size_t len = static_cast<size_t>(str.size());
 	if (this->length != len) return false;
 	return (0 == memcmp(str.c_str(), this->content, length));
@@ -129,7 +129,7 @@ void binstream::append(const binstream& str) {
 	);
 }
 
-uint8_t binstream::at(size_t pos){
+uint8_t binstream::at(size_t pos)const {
 	if (pos >= length) {
 		throw BinstreamException("Index out of bounds");
 		return 0;
@@ -139,16 +139,16 @@ uint8_t binstream::at(size_t pos){
 	}
 }
 
-uint8_t& binstream::operator[](size_t pos) noexcept{
+uint8_t& binstream::operator[](size_t pos)const noexcept{
 	return content[pos];
 }
 
-uint8_t& binstream::operator()(size_t pos) noexcept{
+uint8_t& binstream::operator()(size_t pos)const noexcept{
 	pos = pos % length;
 	return content[pos];
 }
 
-std::string binstream::toStdString(){
+std::string binstream::toStdString()const {
 	std::string ret((const char*)content,length);
 	return std::move(ret);
 }
@@ -283,7 +283,7 @@ binstream operator+(const std::string& s1, binstream& s2) {
 	return ret;
 }
 
-binstream operator+(binstream& s1, const std::string& s2) {
+binstream operator+(const binstream& s1, const std::string& s2) {
 	binstream ret(s2.size() + s1.size());
 	ret.append(s1);
 	ret.append(s2);
