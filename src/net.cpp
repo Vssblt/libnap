@@ -1,4 +1,5 @@
 #include "net.h"
+#include <bits/stdint-uintn.h>
 _NAP_BEGIN
 
 
@@ -179,15 +180,11 @@ napcom::ret napcom::sendpackage(binstream& package){
 	if (state == false)
 		return ret::ruined;
 	uint32_t package_size = (uint32_t)package.size();
-	if (package_size > 0xffff)
-		return ret::mecismsend;
+	uint64_t head =  (uint64_t)0x01000000 << 48;
+	head += package_size;
 	
-	uint32_t length = package_size;
-	length <<= 16;
-	length += package_size;
-
 	bool r = net::sendInsist(
-		net, (char*)&length, 4);
+		net, (char*)&head, 8);
 	if (!r) {
 		//网络连接异常
 		state = false;
@@ -208,24 +205,22 @@ napcom::ret napcom::recvpackage(binstream& recvp){
 		return ret::ruined;
 
 	std::lock_guard<std::mutex> s(mu_recv_channel);
-	uint32_t head;
-	bool r = net::recvInsist(net, (char*)&head, 4);
+	uint64_t head;
+	bool r = net::recvInsist(net, (char*)&head, 8);
 	if (!r) {
 		//网络连接异常，或socket资源已关闭
 		state = false;
 		return ret::ruined;
 	}
-	uint16_t h;
-	uint16_t l;
-	h = head >> 16;
-	l = head & 0x0000ffff;
-	if (h != l) {
+	uint32_t version = head >> 32;
+	uint32_t packet_length = (uint32_t)((head << 32) >> 32);
+	if (version != 0x01000000) {
 		state = false;
 		return ret::ruined;
 	}
 	binstream data;
-	data.resize(h);
-	r = net::recvInsist(net, (char*)data.str(), h);
+	data.resize(packet_length);
+	r = net::recvInsist(net, (char*)data.str(), packet_length);
 	if (!r) {
 		//网络连接异常，或socket资源已关闭
 		state = false;
