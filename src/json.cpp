@@ -20,27 +20,27 @@ void JsonNode::key(binstream key){
 	_key = std::move(key);
 }
 
-int JsonNode::asInt(){
+int JsonNode::asInt() const {
 	return _bindata.to<int>();
 }
 
-long long JsonNode::asLong(){
+long long JsonNode::asLong() const {
 	return _bindata.to<long long>();
 }
 
-double JsonNode::asFloat(){
+double JsonNode::asFloat() const {
 	return _bindata.to<double>();
 }
 
-binstream JsonNode::asString(){
+binstream JsonNode::asString() const {
 	return _bindata.toStdString();
 }
 
-binstream JsonNode::asBinstream(){
+binstream JsonNode::asBinstream() const {
 	return _bindata;
 }
 
-bool JsonNode::asBool(){
+bool JsonNode::asBool() const{
 	return _bindata.to<bool>();
 }
 
@@ -79,6 +79,14 @@ void JsonNode::append(JsonNode node){
 	array_values.push_back(std::move(node));
 }
 
+size_t JsonNode::size() const{
+	if (this->array_values.size() != 0)
+		return this->array_values.size();
+	else
+		return this->object_values.size();
+
+}
+
 
 
 void JsonNode::set(binstream& str, BasicJsonType t){
@@ -86,7 +94,7 @@ void JsonNode::set(binstream& str, BasicJsonType t){
 	this->_bintype = t;
 }
 
-bool JsonNode::asNull(){
+bool JsonNode::asNull() const{
 	return is_null;
 }
 

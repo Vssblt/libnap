@@ -50,17 +50,17 @@ public:
 	
 
 	 //Getter
-	int asInt();
-	long long asLong();
-	double asFloat();
+	int asInt() const;
+	long long asLong() const;
+	double asFloat() const;
 
-	binstream asString();
-	binstream asBinstream();
+	binstream asString() const;
+	binstream asBinstream() const;
 	
-	bool asBool();
+	bool asBool() const;
 
 	//null support
-	bool asNull();
+	bool asNull() const;
 	void setNull(bool null = true);
 
 //Object Type
@@ -68,8 +68,10 @@ public:
 	void append(binstream key,JsonNode);
 
 //Array Type
-	JsonNode& operator[](size_t index);
+	JsonNode& operator[](size_t index) ;
 	void append(JsonNode);
+
+	size_t size() const;
 
 protected:
 
