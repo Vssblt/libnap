@@ -25,3 +25,5 @@ StdAfx.h
 StdAfx.cpp
 .temp/
 install/
+.clangd/
+compile_commands.json
