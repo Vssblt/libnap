@@ -180,7 +180,7 @@ napcom::ret napcom::sendpackage(binstream& package){
 	if (state == false)
 		return ret::ruined;
 	uint32_t package_size = (uint32_t)package.size();
-	uint64_t head =  (uint64_t)0x01000000 << 48;
+	uint64_t head =  (uint64_t)0x01000000 << 32;
 	head += package_size;
 	
 	bool r = net::sendInsist(
@@ -213,7 +213,7 @@ napcom::ret napcom::recvpackage(binstream& recvp){
 		return ret::ruined;
 	}
 	uint32_t version = head >> 32;
-	uint32_t packet_length = (uint32_t)((head << 32) >> 32);
+	uint32_t packet_length = (uint32_t)(head & 0x00000000ffffffff);
 	if (version != 0x01000000) {
 		state = false;
 		return ret::ruined;
