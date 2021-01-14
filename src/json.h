@@ -71,6 +71,11 @@ public:
 	JsonNode& operator[](size_t index) ;
 	void append(JsonNode);
 
+	inline binstream json() noexcept
+	{
+		return this->_json;
+	}
+
 	size_t size() const;
 
 protected:
@@ -83,6 +88,8 @@ private:
 	
 	binstream _bindata;
 	BasicJsonType _bintype;
+
+	binstream _json;
 
 	bool is_null= false;
 
