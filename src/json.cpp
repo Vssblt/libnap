@@ -1,6 +1,5 @@
 #include "json.h"
 #include <assert.h>
-#include <cstring>
 #include <typeinfo>
 _NAP_BEGIN
 
@@ -141,8 +140,6 @@ bool JsonParser::parse(binstream str) {
 }
 
 bool JsonParser::parseObject(int& pos, JsonNode&node){
-	int start = pos;
-	int end = start;
 	//The character after'{' is a string or'}'
 	assert(json.at(pos) == L_L);
 	pos++;
@@ -161,15 +158,7 @@ bool JsonParser::parseObject(int& pos, JsonNode&node){
 				pos++;
 				continue;
 			}else if(json.at(pos) == R_L){
-
 				pos++; //Remove closing parenthesis
-				// 
-				{
-					end = pos;
-					binstream value_object(json.toStdString().substr(start, end).c_str(), end - start);
-					node._json = value_object;
-				}
-
 				return true;
 			}else {
 				setError(pos);
@@ -186,8 +175,6 @@ bool JsonParser::parseObject(int& pos, JsonNode&node){
 }
 
 bool JsonParser::parseArray(int& pos, JsonNode& node){
-	int start = pos;
-	int end = pos;
 	//'[' is expected to be string, number, null, boolean, left brace, left square bracket, right square bracket.
 	assert(json.at(pos) == L_M);
 	pos++;
@@ -210,15 +197,7 @@ bool JsonParser::parseArray(int& pos, JsonNode& node){
 				pos++;
 				continue;
 			}else if (json.at(pos) == R_M) {
-
 				pos++; //Remove closing parenthesis
-				// 
-				{
-					end = pos;
-					binstream value_object(json.toStdString().substr(start, end).c_str(), end - start);
-					node._json = value_object;
-				}
-
 				return true;
 			}else {
 				setError(pos);

@@ -71,11 +71,6 @@ public:
 	JsonNode& operator[](size_t index) ;
 	void append(JsonNode);
 
-	inline binstream json() noexcept
-	{
-		return this->_json;
-	}
-
 	size_t size() const;
 
 protected:
@@ -88,8 +83,6 @@ private:
 	
 	binstream _bindata;
 	BasicJsonType _bintype;
-
-	binstream _json;
 
 	bool is_null= false;
 
@@ -167,14 +160,14 @@ private:
 //Convert class to json string
 class JsonStringify {
 public:
-	binstream stringify(JsonNode&);
+	static binstream stringify(JsonNode&);
 
 protected:
 	
-	void strifyKV(JsonNode&, binstream&);
-	void strifyValue(JsonNode&, binstream&);
-	void dealArray(JsonNode&, binstream&);
-	void dealObject(JsonNode&, binstream&);
+	static void strifyKV(JsonNode&, binstream&);
+	static void strifyValue(JsonNode&, binstream&);
+	static void dealArray(JsonNode&, binstream&);
+	static void dealObject(JsonNode&, binstream&);
 
 };
 
