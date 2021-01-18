@@ -37,10 +37,19 @@ class JsonNode {
 public:
 	JsonNode();
 	~JsonNode();
+	
+	template <class T>
+	JsonNode(const T &value);
+	
+	template <class T>
+	JsonNode(const binstream &key, const T &value);
 
 	//set & copy construct
 	template <class T>
 	inline JsonNode& operator=(const T&);
+	
+	template <class T>
+	inline JsonNode& operator=(const std::vector<T>&);
 
 
 	binstream key();
@@ -94,12 +103,32 @@ private:
 };
 
 template<class T>
+JsonNode::JsonNode(const T &value)
+{
+	*this = value;
+}
+
+template<class T>
+JsonNode::JsonNode(const binstream &key, const T &value)
+{
+	(*this)[key] = value;
+}
+
+template<class T>
+inline JsonNode& JsonNode::operator=(const std::vector<T>& value) {
+	for (int i = 0; i < value.size(); i++)
+	{
+		this->array_values.push_back(JsonNode(value[i]));
+	}
+}
+
+template<class T>
 inline JsonNode& JsonNode::operator=(const T& value) {
 	if (typeid(T) == typeid(float) ||
-		typeid(T) == typeid(double) ||
-		typeid(T) == typeid(int) ||
-		typeid(T) == typeid(long long)
-		) {
+			typeid(T) == typeid(double) ||
+			typeid(T) == typeid(int) ||
+			typeid(T) == typeid(long long)
+	) {
 		_bintype = Number;
 	}else if (typeid(T) == typeid(bool)) {
 		_bintype = Boolean;
