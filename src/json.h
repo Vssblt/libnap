@@ -120,6 +120,7 @@ inline JsonNode& JsonNode::operator=(const std::vector<T>& value) {
 	{
 		this->array_values.push_back(JsonNode(value[i]));
 	}
+	return *this;
 }
 
 template<class T>
