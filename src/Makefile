@@ -15,3 +15,8 @@ libnap: $(OBJ)
 
 clean:
 	rm -f *.o
+
+install: libnap
+	cp ../output/libnap.a /usr/local/lib/
+	mkdir /usr/local/include/libnap -p
+	cp ./*.h /usr/local/include/libnap/

@@ -26,8 +26,8 @@ checkdir:
 fast: 
 	make -j -s build
 
-# install:
-# 	make -C src install
+install:
+	make -C src install
 
-# uninstall:
-# 	make -C src install
+uninstall:
+	make -C src install
