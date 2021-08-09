@@ -18,5 +18,6 @@ clean:
 
 install: libnap
 	cp ../output/libnap.a /usr/local/lib/
+	rm /usr/local/include/libnap -rf
 	mkdir /usr/local/include/libnap -p
 	cp ./*.h /usr/local/include/libnap/
