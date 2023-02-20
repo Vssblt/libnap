@@ -162,11 +162,14 @@ class JsonStringify {
 public:
   static binstream stringify(JsonNode &);
 
+  // Best performance but no escape character transformation.
+  static binstream stringifyUnsafe(JsonNode &node);
+
 protected:
-  static void strifyKV(JsonNode &, binstream &);
-  static void strifyValue(JsonNode &, binstream &);
-  static void dealArray(JsonNode &, binstream &);
-  static void dealObject(JsonNode &, binstream &);
+  static void strifyKV(JsonNode &, binstream &, bool safe = 1);
+  static void strifyValue(JsonNode &, binstream &, bool safe = 1);
+  static void dealArray(JsonNode &, binstream &, bool safe = 1);
+  static void dealObject(JsonNode &, binstream &, bool safe = 1);
 };
 
 _NAP_END

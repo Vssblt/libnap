@@ -145,7 +145,7 @@ bool JsonParser::parseObject(int &pos, JsonNode &node) {
 
 bool JsonParser::parseArray(int &pos, JsonNode &node) {
   //'[' is expected to be string, number, null, boolean, left brace, left square
-  //bracket, right square bracket.
+  // bracket, right square bracket.
   assert(json.at(pos) == L_M);
   pos++;
   SKIP_SPACE(pos, json);
@@ -224,11 +224,11 @@ binstream JsonParser::getString(int pos, int &len) {
 void JsonParser::setError(int pos, int msg) {
   binstream errorinfo = "JsonException - ";
   const char *errormsg[] = {
-      "Unexpected character at position ",  //出现意外的字符
-      "Parse exception: Unknown Exception", //未知原因的解析异常
-      "Parse exception: ",                  //解析异常
-      "Unclosed string at pos: ",           //未闭合的字符串
-      "Illegal character at position "      //不合法的字符
+      "Unexpected character at position ",  // 出现意外的字符
+      "Parse exception: Unknown Exception", // 未知原因的解析异常
+      "Parse exception: ",                  // 解析异常
+      "Unclosed string at pos: ",           // 未闭合的字符串
+      "Illegal character at position "      // 不合法的字符
   };
   errorinfo += errormsg[msg];
   errorinfo += binstream::from<int>(pos);
@@ -304,15 +304,15 @@ bool JsonParser::parseKV(int &pos, JsonNode &node) {
     setError(pos);
     return false;
   } else {
-    pos++; //消化冒号
+    pos++; // 消化冒号
   }
   return parseValue(pos, newnode);
 }
 
 bool JsonParser::parseValue(int &pos, JsonNode &node) {
   // Expected after the colon is string, number, null, boolean, left brace, left
-  // square bracket The colon is not part of the value part and should be removed
-  // by the caller
+  // square bracket The colon is not part of the value part and should be
+  // removed by the caller
   SKIP_SPACE(pos, json);
 
   // Determine the value type
@@ -395,25 +395,39 @@ binstream JsonStringify::stringify(JsonNode &node) {
   binstream str;
   if (node.array_values.size() != 0) {
     // Array
-    dealArray(node, str);
+    dealArray(node, str, 1);
   } else if (node.object_values.size() != 0) {
     // Object
-    dealObject(node, str);
+    dealObject(node, str, 1);
   } else {
     str = "{}";
   }
   return str;
 }
 
-void JsonStringify::strifyKV(JsonNode &node, binstream &str) {
+binstream JsonStringify::stringifyUnsafe(JsonNode &node) {
+  binstream str;
+  if (node.array_values.size() != 0) {
+    // Array
+    dealArray(node, str, 0);
+  } else if (node.object_values.size() != 0) {
+    // Object
+    dealObject(node, str, 0);
+  } else {
+    str = "{}";
+  }
+  return str;
+}
+
+void JsonStringify::strifyKV(JsonNode &node, binstream &str, bool safe) {
   str += "\"";
   str += node.key();
   str += "\"";
   str += ":";
-  strifyValue(node, str);
+  strifyValue(node, str, safe);
 }
 
-void JsonStringify::strifyValue(JsonNode &node, binstream &str) {
+void JsonStringify::strifyValue(JsonNode &node, binstream &str, bool safe) {
   // Determine what type is next
   if (node.asNull()) { // Determine if it is null
     str += "null";
@@ -422,13 +436,13 @@ void JsonStringify::strifyValue(JsonNode &node, binstream &str) {
 
   if (node.array_values.size() != 0) {
     // Array
-    dealArray(node, str);
+    dealArray(node, str, safe);
     return;
   }
 
   if (node.object_values.size() != 0) {
     // Object
-    dealObject(node, str);
+    dealObject(node, str, safe);
     return;
   }
 
@@ -440,12 +454,16 @@ void JsonStringify::strifyValue(JsonNode &node, binstream &str) {
   case String: {
     str += "\"";
 
-    for (char c : node._bindata) {
-      if (c == '\"') {
-        str += "\\\"";
-      } else {
-        str += c;
+    if (safe) {
+      for (char c : node._bindata) {
+        if (c == '\"') {
+          str += "\\\"";
+        } else {
+          str += c;
+        }
       }
+    } else {
+      str += node._bindata;
     }
 
     str += "\"";
@@ -461,19 +479,19 @@ void JsonStringify::strifyValue(JsonNode &node, binstream &str) {
   }
 }
 
-void JsonStringify::dealArray(JsonNode &node, binstream &str) {
+void JsonStringify::dealArray(JsonNode &node, binstream &str, bool safe) {
   str += "[";
   for (JsonNode &n : node.array_values) {
-    strifyValue(n, str);
+    strifyValue(n, str, safe);
     str += ",";
   }
   str[str.size() - 1] = ']';
 }
 
-void JsonStringify::dealObject(JsonNode &node, binstream &str) {
+void JsonStringify::dealObject(JsonNode &node, binstream &str, bool safe) {
   str += "{";
   for (JsonNode &n : node.object_values) {
-    strifyKV(n, str);
+    strifyKV(n, str, safe);
     str += ",";
   }
   str[str.size() - 1] = '}';
