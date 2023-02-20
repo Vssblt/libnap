@@ -111,6 +111,12 @@ private:
 
 template<class T>
 inline binstream binstream::from(const T n) {
+  if (typeid(T) != typeid(float) && typeid(T) != typeid(double) &&
+  typeid(T) != typeid(int) && typeid(T) != typeid(long long) && typeid(T) != typeid(bool))
+  {
+    return binstream(n);
+  }
+
 	binstream bins;
 	std::stringstream strs;
 	strs << n;
