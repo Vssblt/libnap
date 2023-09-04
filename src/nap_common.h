@@ -46,7 +46,6 @@ typedef unsigned char byte;
 	#include <fcntl.h> 
 	#include <errno.h> 
 	
-	#define ULONG long
 	#define INVALID_SOCKET  (SOCKET)(~0)
 	typedef int socket_t;
 #endif
