@@ -32,8 +32,8 @@ JsonNode &JsonNode::operator[](const binstream &_key) {
   }
   // create node
   JsonNode newnode;
-  newnode.key(_key);
   object_values.push_back(newnode);
+  object_values[object_values.size() - 1].key(_key);
   return object_values[object_values.size() - 1];
 }
 
