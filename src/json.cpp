@@ -255,7 +255,7 @@ int JsonParser::getNumberLen(int pos) {
   int len = 0;
   while (pos < (int)json.size()) {
     char c = json.at(pos);
-    if (len == 0 || c == '-') {
+    if (len == 0 || c == '-' || c == 'e' || c == 'E' || c == '+') {
       len++;
       pos++;
       continue;
